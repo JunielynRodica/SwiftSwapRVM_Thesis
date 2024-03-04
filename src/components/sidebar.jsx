@@ -66,7 +66,28 @@ const Sidebar = ({ children }) => {
                     currentUser
                         ?
                         <>
-                            <button onClick={() => { doSignOut().then(() => { navigate('/login') }) }} className='text-sm text-blue-600 underline'>Logout</button>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+                        <button 
+                            onClick={() => { 
+                                doSignOut().then(() => { 
+                                    navigate('/login') 
+                                }) 
+                            }}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#71a46f',
+                                color: '#090b04',
+                                fontFamily: 'Segoe UI',
+                                fontWeight: 'bold',
+                                border: 'none',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                                transition: 'background-color 0.3s ease',
+                            }}
+                        >Logout</button>
+                        </div>
+                            {/*<button className="logout_button" onClick={() => { doSignOut().then(() => { navigate('/login') }) }}>Logout</button>*/}
                         </>
                         :
                         <>
