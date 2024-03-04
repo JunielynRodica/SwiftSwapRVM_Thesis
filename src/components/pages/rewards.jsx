@@ -1,16 +1,15 @@
 import React, {useState} from "react";
-import "../style/rewards.css";
-import bondpaper from '../assets/bpaper.png';
-import ballpen from '../assets/bpen.png';
-import correctiontape from '../assets/ctape.png';
-import eraser from '../assets/eraser.png';
-import highlighter from '../assets/hlighter.png';
-import notebook from '../assets/ntbook.png';
-import paperclip from '../assets/pclip.png';
-import pencil from '../assets/pencil.png';
-import stickynote from '../assets/snote.png';
-import rvmpic from '../assets/rvmpic.png'; // Import the default picture
-
+import "../../style/rewards.css";
+import bondpaper from '../../assets/bpaper.png';
+import ballpen from '../../assets/bpen.png';
+import correctiontape from '../../assets/ctape.png';
+import eraser from '../../assets/eraser.png';
+import highlighter from '../../assets/hlighter.png';
+import notebook from '../../assets/ntbook.png';
+import paperclip from '../../assets/pclip.png';
+import pencil from '../../assets/pencil.png';
+import stickynote from '../../assets/snote.png';
+import rvmpic from '../../assets/rvmpic.png';
 
 const Rewards = () => {
     const [points, setPoints] = useState(2);
@@ -29,7 +28,7 @@ const Rewards = () => {
     return (
       <div className="rewards_body">
          <header class="header_rewards">
-            <img className="rewards_img" src="http://tinyurl.com/58djnbxb" alt='logo'></img>
+            <img src={rvmpic} alt="logo"></img>
             <h1>S W I F T S W A P | R E W A R D S</h1>
       </header>
         

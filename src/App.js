@@ -1,26 +1,38 @@
 import React from "react";
-import Sidebar from "./components/sidebar";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Rewards from "./pages/rewards";
-import About from "./pages/about";
-import TransactionHistory from "./pages/TransactionHistory";
-import './App.css';
-import Dashboard from "./pages/dashboard";
+import { AuthProvider } from "./contexts/authContext";
+import { useRoutes } from "react-router-dom";
 
-const App = () => {
-    return(
-       <BrowserRouter>
-              <Sidebar>
-                    <Routes>
-                        <Route path="/"element={<Dashboard/>}/>
-                        <Route path="/dashboard"element={<Dashboard/>}/>
-                        <Route path="/rewards"element={<Rewards/>}/>
-                        <Route path="/TransactionHistory"element={<TransactionHistory/>}/>
-                        <Route path="/about"element={<About/>}/>
-                    </Routes>
-                </Sidebar>
-       </BrowserRouter>
+import Login from "./components/auth/login";
+import Register from "./components/auth/register";
+import Home from "./components/home";
+
+import './App.css';
+
+function App() {
+    const routesArray = [
+        {
+            path: "*",
+            element: <Login />,
+        },
+        {
+            path: "/login",
+            element: <Login />,
+        },
+        {
+            path: "/register",
+            element: <Register />,
+        },
+        {
+            path: "/home",
+            element: <Home />,
+        },
+    ];
+    let routesElement = useRoutes(routesArray);
+    return (
+        <AuthProvider>
+            <div>{routesElement}</div>
+        </AuthProvider>
     );
-};
+}
 
 export default App;

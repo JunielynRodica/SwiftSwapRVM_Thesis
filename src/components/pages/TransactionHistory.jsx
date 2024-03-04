@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import '../style/TransactionHistory.css';
+import '../../style/TransactionHistory.css';
 
 const TransactionHistory = () => {
     const [transactions, setTransactions] = useState([

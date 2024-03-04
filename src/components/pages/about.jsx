@@ -1,11 +1,12 @@
 import React from "react";
-import '../style/about.css';
+import '../../style/about.css';
+import rvmpic from '../../assets/rvmpic.png';
 
 const About = () => {
     return(
         <main className="about-page">
         <div className="aboutswift">
-            <img  className="pic1" src="http://tinyurl.com/58djnbxb" alt="logo_swiftswap"></img>
+            <img  className="pic1" src={rvmpic} alt="logo_swiftswap"></img>
         </div>
         <body className="about-body">
             <section className="swiftparagraph">
