@@ -17,7 +17,7 @@ const Register = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
-        if(!isRegistering) {
+        if (!isRegistering) {
             setIsRegistering(true)
             await doCreateUserWithEmailAndPassword(email, password)
         }
@@ -25,7 +25,7 @@ const Register = () => {
 
     return (
         <>
-            {userLoggedIn && (<Navigate to={'/home'} replace={true} />)}
+            {userLoggedIn && (<Navigate to={'/dashboard'} replace={true} />)}
 
             <main>
                 <div>

@@ -1,14 +1,19 @@
 import React from "react";
-import { AuthProvider } from "./contexts/authContext";
+import { AuthProvider, useAuth } from "./contexts/authContext";
 import { useRoutes } from "react-router-dom";
 
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
-import Home from "./components/home";
+
+import Dashboard from "./components/pages/dashboard";
+import Rewards from "./components/pages/rewards";
+import About from "./components/pages/about";
+import TransactionHistory from "./components/pages/TransactionHistory";
 
 import './App.css';
 
 function App() {
+
     const routesArray = [
         {
             path: "*",
@@ -23,8 +28,20 @@ function App() {
             element: <Register />,
         },
         {
-            path: "/home",
-            element: <Home />,
+            path: "/dashboard",
+            element: <Dashboard />,
+        },
+        {
+            path: "/rewards",
+            element: <Rewards />,
+        },
+        {
+            path: "/transactionHistory",
+            element: <TransactionHistory />,
+        },
+        {
+            path: "/about",
+            element: <About />,
         },
     ];
     let routesElement = useRoutes(routesArray);

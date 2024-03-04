@@ -22,7 +22,7 @@ const Login = () => {
 
     return (
         <div>
-            {userLoggedIn && (<Navigate to={'/home'} replace={true} />)}
+            {userLoggedIn && (<Navigate to={'/dashboard'} replace={true} />)}
 
             <main>
                 <div>

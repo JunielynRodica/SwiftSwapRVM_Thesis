@@ -1,7 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import { auth } from "../../firebase/firebase";
-// import { GoogleAuthProvider } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
+
+import Sidebar from "../../components/sidebar";
+import Rewards from "../../components/pages/rewards";
+import About from "../../components/pages/about";
+import Dashboard from "../../components/pages/dashboard";
+import TransactionHistory from "../../components/pages/TransactionHistory";
 
 const AuthContext = React.createContext();
 
@@ -32,12 +38,6 @@ export function AuthProvider({ children }) {
       );
       setIsEmailUser(isEmail);
 
-      // check if the auth provider is google or not
-    //   const isGoogle = user.providerData.some(
-    //     (provider) => provider.providerId === GoogleAuthProvider.PROVIDER_ID
-    //   );
-    //   setIsGoogleUser(isGoogle);
-
       setUserLoggedIn(true);
     } else {
       setCurrentUser(null);
@@ -57,7 +57,18 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {!loading && userLoggedIn ? (
+        <Sidebar>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/TransactionHistory" element={<TransactionHistory />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </Sidebar>
+      ) : children
+      }
     </AuthContext.Provider>
   );
 }
