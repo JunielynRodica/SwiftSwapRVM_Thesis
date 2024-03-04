@@ -1,0 +1,83 @@
+
+body_rewards {
+    font-family: 'Baskervville', serif;
+    color: linen;
+    background: radial-gradient(848px at 10% 20%, rgba(174, 231, 165, 0.9) 0%, rgb(181, 205, 154) 90%);
+    font-size: large;
+    width: 100vw;
+    height: 100vw;
+  }
+  
+  .product {
+    background-color: #f2f2f2;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  
+  .product img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .product h3 {
+    margin: 0.1em;
+  }
+  
+  .product p {
+    color: #333;
+  }
+  
+  .header_rewards{
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to right, #ECE3CE, #71a46f);
+    border-bottom: 4px solid #739072; 
+    border-radius: 10px;
+    margin-left: 280px;
+  }
+
+  .rewards_img{
+    width: 150px; 
+    margin-right: 20px;
+  }
+  
+  #features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+    padding: 90px 50px 75px 100px;
+    text-align: center;
+    margin-left: 240px;
+  }
+  
+  .redeem-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: linen;
+    background: #3a4d39;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+  }
+  
+  .redeem-btn.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .redeem-btn:hover {
+    background-color: #3a4d39;
+  }
+  
+  .alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+  }

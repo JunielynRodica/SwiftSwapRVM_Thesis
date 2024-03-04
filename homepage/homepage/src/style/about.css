@@ -1,0 +1,64 @@
+.about-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.aboutswift {
+    margin-bottom: 20px;
+    display: flex;
+    padding-left: 20%;    
+}
+
+.pic1 {
+    width: 200px;
+    height: auto;
+}
+
+.about-body {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: justify; 
+}
+
+.swiftparagraph,
+.swiftmission,
+.swiftvision,
+.cornerstone-concepts {
+    margin-bottom: 40px;
+}
+
+h1 {
+    color: #333;
+    font-size: 28px; 
+    margin-bottom: 20px;
+}
+
+p {
+    color: #666;
+    font-size: 18px; 
+    line-height: 1.6;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.one,
+.two,
+.three,
+.four {
+    font-size: 18px;
+    color: #333;
+}
+      
+  

@@ -1,0 +1,76 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #3A4D39;
+  }
+  
+  .container_dashboard{
+    background-color: (848px at 10% 20%, rgba(174, 231, 165, 0.9) 0%, rgb(181, 205, 154) 90%);
+    padding-left: 280px;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(to right, #ECE3CE, #71a46f);
+    border-bottom: 4px solid #739072; 
+    border-radius: 10px;
+  }
+  
+  .header img {
+    width: 150px; 
+    margin-right: 20px;
+  }
+  
+  .header h1 {
+    color: #3A4D39;
+    font-size: 40px;
+  }
+  
+  .user {
+    background: linear-gradient(to right, #a7d4a6, #ECE3CE); 
+    text-align: left;
+    font-size: 24px; 
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px; 
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto; 
+  }
+  
+  .user-welcome, .user-point {
+    font-weight: bold;
+    color: #3A4D39; 
+  }
+  
+  .intro {
+    text-align: center;
+    font-size: 18px; 
+    color: #3A4D39; 
+  }
+  
+  .how-to {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    max-width: 1400px;
+    margin: 20px auto; 
+    padding: 20px;
+  }
+  
+  .how-to img {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    object-fit: cover;
+  }
+  
