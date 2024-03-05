@@ -10,6 +10,8 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import rvmpic from '../assets/rvmpic.png';
 import { useAuth } from "../contexts/authContext";
 
+
+
 import { doSignOut } from '../firebase/auth'
 
 const Sidebar = ({ children }) => {
@@ -66,7 +68,7 @@ const Sidebar = ({ children }) => {
                     currentUser
                         ?
                         <>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+                        <div  className="logout_button" style={{ display: isOpen ? "block" : "none", justifyContent: 'center', marginTop: '290px', marginLeft: '50px', }}>
                         <button 
                             onClick={() => { 
                                 doSignOut().then(() => { 
@@ -74,7 +76,7 @@ const Sidebar = ({ children }) => {
                                 }) 
                             }}
                             style={{
-                                padding: '10px 20px',
+                                padding: '10px 50px',
                                 backgroundColor: '#71a46f',
                                 color: '#090b04',
                                 fontFamily: 'Segoe UI',
@@ -83,9 +85,10 @@ const Sidebar = ({ children }) => {
                                 borderRadius: '5px',
                                 cursor: 'pointer',
                                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                                transition: 'background-color 0.3s ease',
+                                transition: 'background-color 0.5s ease', 
                             }}
-                        >Logout</button>
+                        >
+                            Logout</button>
                         </div>
                             {/*<button className="logout_button" onClick={() => { doSignOut().then(() => { navigate('/login') }) }}>Logout</button>*/}
                         </>
