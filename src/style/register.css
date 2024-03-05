@@ -1,0 +1,148 @@
+.register-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    width: 80%;
+    height: 80%;
+    background: rgb(251, 250, 225);
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 20px; 
+}
+
+.left-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 10px;
+    margin-right: 20px; 
+    position: relative; 
+}
+
+.separator {
+    position: absolute;
+    height: 100%; 
+    width: 2px;
+    background-color: #3A4D39;
+    top: 0;
+    right: 0; 
+}
+
+.reg_icon {
+    margin: auto;
+    max-width: 80%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.right-content {
+    flex: 1; 
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 30px;
+    color: #3A4D39; 
+    font-size: xx-large; 
+    text-align: center; 
+    padding: 0; 
+    margin: 0; 
+    border: none;
+    background: none; 
+    text-align: center;
+}
+
+.text {
+    color: #3A4D39;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.reg_input {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    max-width: 400px;
+    height: 60px;
+    background: #ADBC9F;
+    border-radius: 6px;
+    margin-bottom: 2%;
+    padding-left: 3%;
+}
+
+.reg_inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    width: 100%;
+}
+
+.reg_input input {
+    flex: 1;
+    width: 90%; 
+    max-width: 400px;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #3A4D39;
+    font-size: 19px;
+}
+.input img {
+    margin-right: 15px; 
+}
+
+.forgot-password {
+    margin-top: 20px; 
+    color: #3A4D39;
+    font-size: 18px;
+}
+
+.submit-container {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.submit {
+    width: 220px;
+    height: 59px;
+    color: #3A4D39;
+    background: #ADBC9F;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.submit.gray {
+    background: #eaeaea;
+    color: #676767;
+}
+
+
+@media screen and (max-width: 768px) {
+    .register-container {
+        width: auto;
+        height: auto; 
+    }
+    
+    .left-content, .right-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .reg_input {
+        width: 90%;
+    }
+}

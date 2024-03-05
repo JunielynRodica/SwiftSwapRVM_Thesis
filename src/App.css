@@ -10,10 +10,12 @@
 }
 
 main{
-  width: 100%;
-  padding: 20px;
-  /* padding-left: 280px; */  
-  background-color: #e4eace;
+  width: 150%;
+  height:100vh;
+  padding: 10px;
+  /*padding-left: 280px; */
+  /*background-color: #e4eace; */
+  background: linear-gradient(109.6deg, rgb(251, 250, 225) 11.2%, rgb(206, 240, 185) 47.5%, rgb(100, 163, 111) 100.2%);
 }
 
 .sidebar{
