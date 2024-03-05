@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
-import { Navigate, Link, useNavigate } from 'react-router-dom'
+import { Navigate, Link } from 'react-router-dom'
 import { useAuth } from '../../../contexts/authContext'
 import { doCreateUserWithEmailAndPassword } from '../../../firebase/auth'
+import rvmpic1 from '../../../assets/rvmpic1.png'; 
+import email_icon from '../../../assets/Email.png'; 
+import password_icon from '../../../assets/Password.png';  
+import student_icon from '../../../assets/Person.png';  
+import '../../../style/register.css';
 
 const Register = () => {
-
-    const navigate = useNavigate()
-
+    const { userLoggedIn } = useAuth()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [confirmPassword, setconfirmPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
     const [isRegistering, setIsRegistering] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-
-    const { userLoggedIn } = useAuth()
+    const [studentNumber, setStudentNumber] = useState('')
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -22,79 +24,50 @@ const Register = () => {
             await doCreateUserWithEmailAndPassword(email, password)
         }
     }
-
     return (
-        <>
-            {userLoggedIn && (<Navigate to={'/dashboard'} replace={true} />)}
+        <div>
+            {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
 
             <main>
-                <div>
-                    <div>
-                        <div>
-                            <h3>Create a New Account</h3>
-                        </div>
-
+    <div className="container">
+        <div className="left-content">
+            <img src={rvmpic1} alt="reg" className="reg_icon" />
+            <hr className="separator"/>
+        </div>
+        <div className="right-content">
+                        <h3 className="header">Create a New Account</h3>
+                        <form onSubmit={onSubmit}>
+                            <div className="reg_inputs">
+                                <div className="reg_input">
+                                <img src={email_icon} alt=""/>
+                                    <input type="email" autoComplete="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                                </div>
+                                <div className="reg_input">
+                                <img src={student_icon} alt=""/>
+                                    <input type="text" autoComplete='off' placeholder="Student Number" required value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} />
+                                </div>
+                                <div className="reg_input">
+                                <img src={password_icon} alt=""/>
+                                    <input type="password" autoComplete="new-password" placeholder="Password" disabled={isRegistering} required value={password} onChange={(e) => setPassword(e.target.value)} />
+                                </div>
+                                <div className="reg_input">
+                                <img src={password_icon} alt=""/>
+                                    <input type="password" autoComplete="off" placeholder="Confirm Password" disabled={isRegistering} required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                </div>
+                            </div>
+                            {errorMessage && <span className="forgot-password">{errorMessage}</span>}
+                            <div className="submit-container">
+                                <button type="submit" className="submit" disabled={isRegistering}>
+                                    {isRegistering ? 'Signing Up...' : 'Sign Up'}
+                                </button>
+                            </div>
+                        </form>
+                        <p>Already have an account? <Link to="/login">Sign in</Link></p>
                     </div>
-                    <form
-                        onSubmit={onSubmit}
-                    >
-                        <div>
-                            <label>
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                autoComplete='email'
-                                required
-                                value={email} onChange={(e) => { setEmail(e.target.value) }}
-                            />
-                        </div>
-
-                        <div>
-                            <label>
-                                Password
-                            </label>
-                            <input
-                                disabled={isRegistering}
-                                type="password"
-                                autoComplete='new-password'
-                                required
-                                value={password} onChange={(e) => { setPassword(e.target.value) }}
-                            />
-                        </div>
-
-                        <div>
-                            <label>
-                                Confirm Password
-                            </label>
-                            <input
-                                disabled={isRegistering}
-                                type="password"
-                                autoComplete='off'
-                                required
-                                value={confirmPassword} onChange={(e) => { setconfirmPassword(e.target.value) }}
-                            />
-                        </div>
-
-                        {errorMessage && (
-                            <span>{errorMessage}</span>
-                        )}
-
-                        <button
-                            type="submit"
-                            disabled={isRegistering}
-                        >
-                            {isRegistering ? 'Signing Up...' : 'Sign Up'}
-                        </button>
-                        <div>
-                            Already have an account? {'   '}
-                            <Link to={'/login'}>Continue</Link>
-                        </div>
-                    </form>
                 </div>
             </main>
-        </>
-    )
-}
+        </div>
+    );
+};
 
-export default Register
+export default Register;
