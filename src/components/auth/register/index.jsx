@@ -6,6 +6,7 @@ import rvmpic1 from '../../../assets/rvmpic1.png';
 import email_icon from '../../../assets/Email.png'; 
 import password_icon from '../../../assets/Password.png';  
 import student_icon from '../../../assets/Person.png';  
+import cpass_icon from '../../../assets/confirmpass.png';  
 import '../../../style/register.css';
 
 const Register = () => {
@@ -28,7 +29,7 @@ const Register = () => {
         <div>
             {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
 
-            <main>
+            <main classname="register">
     <div className="container">
         <div className="left-content">
             <img src={rvmpic1} alt="reg" className="reg_icon" />
@@ -40,18 +41,18 @@ const Register = () => {
                             <div className="reg_inputs">
                                 <div className="reg_input">
                                 <img src={email_icon} alt=""/>
-                                    <input type="email" autoComplete="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    <input type="email" placeholder="Institutional Email" autoComplete="email"  required value={email} onChange={(e) => setEmail(e.target.value)} />
                                 </div>
                                 <div className="reg_input">
                                 <img src={student_icon} alt=""/>
-                                    <input type="text" autoComplete='off' placeholder="Student Number" required value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} />
+                                    <input type="text" autoComplete='off' placeholder="Student / Employee Number" required value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} />
                                 </div>
                                 <div className="reg_input">
                                 <img src={password_icon} alt=""/>
                                     <input type="password" autoComplete="new-password" placeholder="Password" disabled={isRegistering} required value={password} onChange={(e) => setPassword(e.target.value)} />
                                 </div>
                                 <div className="reg_input">
-                                <img src={password_icon} alt=""/>
+                                <img src={cpass_icon} alt=""/>
                                     <input type="password" autoComplete="off" placeholder="Confirm Password" disabled={isRegistering} required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                                 </div>
                             </div>
