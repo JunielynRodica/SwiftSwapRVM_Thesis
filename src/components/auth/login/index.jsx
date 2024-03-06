@@ -7,7 +7,6 @@ import email_icon from '../../../assets/Email.png';
 import password_icon from '../../../assets/Password.png'; 
 import '../../../style/login.css';
 
-
 const Login = () => {
     const { userLoggedIn } = useAuth();
 
