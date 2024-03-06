@@ -11,13 +11,14 @@ import About from "./components/pages/about";
 import TransactionHistory from "./components/pages/TransactionHistory";
 
 import './App.css';
+import { FaDashcube } from "react-icons/fa";
 
 function App() {
 
     const routesArray = [
         {
             path: "*",
-            element: <Dashboard />,
+            element: <Login/>,
         },
         {
             path: "/login",
