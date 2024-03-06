@@ -28,7 +28,7 @@ const Login = () => {
         <div>
             {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
 
-            <main>
+            <main className="login">
     <div className="container">
         <div className="left-content">
             <img src={qr_icon} alt="Login Image" className="login-image" />
