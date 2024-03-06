@@ -15,7 +15,7 @@ const Dashboard = () => {
 
     return(
     <div className="container_dashboard">
-      <header class="header">
+      <header class="header_dashboard">
             <img src={rvmpic} alt='logo'></img>
             <h1>S W I F T S W A P</h1>
       </header>

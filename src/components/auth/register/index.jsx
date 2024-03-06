@@ -31,12 +31,12 @@ const Register = () => {
 
             <main classname="register">
     <div className="container">
-        <div className="left-content">
+        <div className="register_left">
             <img src={rvmpic1} alt="reg" className="reg_icon" />
             <hr className="separator"/>
         </div>
         <div className="right-content">
-                        <h3 className="header">Create a New Account</h3>
+                        <h3 className="header_register">Create a New Account</h3>
                         <form onSubmit={onSubmit}>
                             <div className="reg_inputs">
                                 <div className="reg_input">

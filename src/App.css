@@ -10,12 +10,12 @@
 }
 
 main{
-  width: 150%;
-  /*height:100vh;*/
-  padding: 10px;
+  width: 100%;
+ /* height:100vh; */
+  padding: 10px; 
+  
   /*padding-left: 280px; */
-  background-color: #e4eace; 
- 
+  background-color: #e4eace;
 }
 
 .sidebar{

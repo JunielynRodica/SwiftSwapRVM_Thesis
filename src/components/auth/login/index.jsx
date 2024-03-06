@@ -28,14 +28,14 @@ const Login = () => {
         <div>
             {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
 
-            <main className="login">
-    <div className="container">
+<main className="login">
+    <div className="container_login">
         <div className="left-content">
             <img src={qr_icon} alt="Login Image" className="login-image" />
             <hr className="separator" />
         </div>
         <div className="right-content">
-            <h3 className="header">Welcome Back</h3>
+            <h3 className="header_login">Welcome Back</h3>
             <form onSubmit={onSubmit}>
                 <div className="inputs">
                     <div className="input">

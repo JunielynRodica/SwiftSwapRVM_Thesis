@@ -15,13 +15,13 @@
     padding-left: 280px;
   }
   
-  .header {
+  .header_dashboard {
     display: flex;
     align-items: center;
-    padding: 20px;
     background: linear-gradient(to right, #ECE3CE, #71a46f);
     border-bottom: 4px solid #739072; 
     border-radius: 10px;
+    margin-left: 2px;
   }
   
   .header img {
