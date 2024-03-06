@@ -29,13 +29,16 @@
     position: relative; 
 }
 
-.separator {
-    position: absolute;
-    height: 100%; 
-    width: 2px;
-    background-color: #3A4D39;
-    top: 0;
-    right: 0; 
+
+@media (min-width:768px) {
+    .reg-separator {
+        position: absolute;
+        height: 100%; 
+        width: 2px;
+        background-color: #3A4D39;
+        top: 0;
+        right: 0; 
+    }
 }
 
 .reg_icon {
@@ -114,7 +117,41 @@
     display: flex;
     justify-content: center;
 }
+.login .wrapper {
+    
+}
+.register .outer-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
 
+}
+.register .inner-wrapper .right-content {
+    width: 70%;
+}
+
+.register .inner-wrapper .register_left  {
+    width: 30%;
+}
+@media (max-width:767px) {
+    .register .inner-wrapper .register_left {
+        width: 100%;
+    }
+    .register .inner-wrapper .right-content {
+        width: 100%;
+    }
+}
+
+
+
+.register .inner-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap:wrap;
+}
 .submit {
     width: 220px;
     height: 59px;
