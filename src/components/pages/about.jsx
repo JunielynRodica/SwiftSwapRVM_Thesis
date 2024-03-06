@@ -4,7 +4,7 @@ import rvmpic from '../../assets/rvmpic.png';
 
 const About = () => {
     return(
-        <main className="about-page">
+        <div className="about-page">
         <div className="aboutswift">
             <img  className="pic1" src={rvmpic} alt="logo_swiftswap"></img>
         </div>
@@ -57,7 +57,7 @@ const About = () => {
                 </ul>
             </section>
         </body>
-        </main>
+        </div>
     );
 };
 
