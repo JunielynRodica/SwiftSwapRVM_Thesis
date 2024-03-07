@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "../../style/rewards.css";
 import bondpaper from '../../assets/bpaper.png';
 import ballpen from '../../assets/bpen.png';
@@ -10,14 +10,27 @@ import paperclip from '../../assets/pclip.png';
 import pencil from '../../assets/pencil.png';
 import stickynote from '../../assets/snote.png';
 import rvmpic from '../../assets/rvmpic.png';
+import {
+    addDeductTransactionToCurrentUser,
+    getCurrentUserPoints,
+} from "../../firebase/firebase";
 
 const Rewards = () => {
-    const [points, setPoints] = useState(2);
+    const [points, setPoints] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setPoints(await getCurrentUserPoints());
+        }
+
+        fetchData();
+    }, []);
 
     const handleRedeem = (productName, requiredPoints) => {
       console.log(`Attempting to redeem ${productName}...`);
       if (points >= requiredPoints) {
           setPoints(points - requiredPoints); // Update points after redemption
+          addDeductTransactionToCurrentUser(productName, requiredPoints); // Add transaction to user account
           alert(`Redeeming ${productName}`);
       } else {
           alert("Points insufficient! You cannot redeem this product.");
