@@ -59,13 +59,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider value={value}>
       {!loading && userLoggedIn ? (
         <Sidebar>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/rewards" element={<Rewards />} />
-            <Route path="/TransactionHistory" element={<TransactionHistory />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
+          {children}
         </Sidebar>
       ) : children
       }
