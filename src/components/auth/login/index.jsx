@@ -20,6 +20,8 @@ const Login = () => {
     const [isSigningIn, setIsSigningIn] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const [isScanning, setScanning] = useState(false);
+
     const [queryParameters] = useSearchParams()
     const { saveQRCreds } = useQRStore();
 
@@ -34,6 +36,7 @@ const Login = () => {
                 const { email, password } = JSON.parse(decrypted);
 
                 await doSignInWithEmailAndPassword(email, password).then((res) => {
+                    console.log('qr_encrypted save: ', res.qr_encrypted)
                     saveQRCreds(res.qr_encrypted);
                 });
 
@@ -64,6 +67,22 @@ const Login = () => {
         }
     };
 
+    const startScanning = () => {
+        setScanning(true);
+        const queryParameters = new URLSearchParams(window.location.search);
+        queryParameters.set('scan', true);
+
+        const newUrl = `${window.location.pathname}?${queryParameters.toString()}`;
+        window.history.pushState({}, '', newUrl);
+    }
+
+    const stopScanning = () => {
+        setScanning(false);
+
+        const newUrl = `${window.location.pathname}`;
+        window.history.pushState({}, '', newUrl);
+    }
+
     return (
         <div>
             {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
@@ -71,8 +90,20 @@ const Login = () => {
             <main className="login">
                 <div className="container_login">
                     <div className="left-content">
-                        <img src={qr_icon} alt="Login Image" className="login-image" />
+                        {
+                            isScanning ?
+                                <div className="">
+                                    <p> Looking for QR to scan...</p>
+                                    <button onClick={() => stopScanning()}>Cancel</button>
+                                </div>
+                                :
+                                <button onClick={() => startScanning()}>
+                                    <img src={qr_icon} alt="Login Image" className="login-image" />
+                                </button>
+                        }
+
                         <hr className="separator" />
+
                     </div>
                     <div className="right-content">
                         <h3 className="header_login">Welcome Back</h3>

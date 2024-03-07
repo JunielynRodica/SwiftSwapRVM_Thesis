@@ -1,4 +1,5 @@
 import React from "react";
+import QRCode from "react-qr-code";
 import '../../style/dashboard.css';
 import step1 from '../../assets/step1.png';
 import step2 from '../../assets/step2.png';
@@ -8,10 +9,13 @@ import step5 from '../../assets/step5.png';
 import step6 from '../../assets/step6.png';
 import rvmpic from '../../assets/rvmpic.png';
 import { useAuth } from '../../contexts/authContext';
+import { useQRStore } from "../../store/useQRCreds";
+
 
 const Dashboard = () => {
 
   const { currentUser } = useAuth()
+  const { QRCreds } = useQRStore();
 
   return (
     <div className="container_dashboard">
@@ -37,6 +41,18 @@ const Dashboard = () => {
           <img src={step5} alt="step5"></img>
           <img src={step6} alt="step6"></img>
         </div>
+
+        <div style={{ height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
+          {
+            QRCreds ? <QRCode
+              size={256}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              value={QRCreds || ''}
+              viewBox={`0 0 256 256`}
+            /> : <p className="sentence1">Failed to generate QR, please re-login.</p>
+          }
+        </div>
+
       </body>
     </div>
   );
