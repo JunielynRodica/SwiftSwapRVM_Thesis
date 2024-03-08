@@ -10,7 +10,7 @@
     margin: auto;
     margin-top: 200px;
     width: 70%;
-    /* Adjusted width */
+    
     background: rgb(251, 250, 225);
     padding: 30px;
 }
@@ -20,7 +20,8 @@
     flex-direction: column;
     align-items: center;
     padding-right: 10px;
-    margin-right: 20px;
+    margin-right: 20px; 
+    position: relative;
 }
 
 .separator {
@@ -34,9 +35,11 @@
 
 .login-image {
     margin: auto;
-    max-width: 80%;
+    max-width: 85%;
     height: auto;
     margin-bottom: 20px;
+    background-color: transparent;
+    border: none;
 }
 
 .right-content {
@@ -44,6 +47,16 @@
     text-align: center;
 }
 
+.header_login{
+    margin-bottom: 30px;
+    color: #3A4D39; 
+    font-size: xx-large; 
+    text-align: center; 
+    padding: 0; 
+    margin: 0; 
+    border: none; 
+    text-align: center;
+}
 .inputs {
     display: flex;
     flex-direction: column;

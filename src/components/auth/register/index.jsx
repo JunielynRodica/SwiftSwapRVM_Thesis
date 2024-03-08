@@ -50,7 +50,7 @@ const Register = () => {
                                 </div>
                                 <div className="reg_input">
                                     <img src={password_icon} alt="" />
-                                    <input type="password" autoComplete="new-password" placeholder="Password" disabled={isRegistering} required value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    <input type="password" autoComplete="new-password" placeholder="Password must be atleast 6 characters" disabled={isRegistering} required value={password} onChange={(e) => setPassword(e.target.value)} />
                                 </div>
                                 <div className="reg_input">
                                     <img src={cpass_icon} alt="" />

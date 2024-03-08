@@ -14,7 +14,14 @@
     background: rgb(251, 250, 225);
     
 }
-
+.separator {
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    background-color: #3A4D39;
+    top: 0;
+    right: 0;
+}
 .header_register{
     text-align: center;
     margin-bottom: 20px; 
@@ -26,7 +33,7 @@
     align-items: center;
     padding-right: 10px;
     margin-right: 20px; 
-    position: relative; 
+    position: relative;
 }
 
 
@@ -43,7 +50,7 @@
 
 .reg_icon {
     margin: auto;
-    max-width: 80%;
+    max-width: 85%;
     height: auto;
     margin-bottom: 20px;
 }
