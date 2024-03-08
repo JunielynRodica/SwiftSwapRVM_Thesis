@@ -12,7 +12,7 @@
     width: 100%;
     height: 100%;
     background: rgb(251, 250, 225);
-    
+    ;
 }
 
 .header_register{
@@ -117,26 +117,21 @@
     display: flex;
     justify-content: center;
 }
-/*.login .wrapper {
-    
-}*/
+
 .register .outer-wrapper {
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    
 
 }
 .register .inner-wrapper .right-content {
     width: 70%;
-    
 }
 
 .register .inner-wrapper .register_left  {
     width: 30%;
-    
 }
 @media (max-width:767px) {
     .register .inner-wrapper .register_left {
@@ -148,14 +143,12 @@
 }
 
 
+
 .register .inner-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap:wrap;
-    background: rgb(251, 250, 225);
-    padding:10px;
-    border-radius: 10px;
 }
 .submit {
     width: 220px;
@@ -172,8 +165,9 @@
 
 .submit.gray {
     background: #eaeaea;
-    color: #3A4D39;
+    color: #676767;
 }
+
 
 @media screen and (max-width: 768px) {
     .register-container {
