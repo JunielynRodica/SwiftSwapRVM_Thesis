@@ -8,6 +8,7 @@ import { useAuth } from '../../../contexts/authContext';
 import qr_icon from '../../../assets/qrlogin.png';
 import email_icon from '../../../assets/Email.png';
 import password_icon from '../../../assets/Password.png';
+import qrscan from '../../../assets/qrscan.png';
 import '../../../style/login.css';
 
 import { useQRStore } from '../../../store/useQRCreds';
@@ -92,12 +93,13 @@ const Login = () => {
                     <div className="left-content">
                         {
                             isScanning ?
-                                <div className="">
-                                    <p> Looking for QR to scan...</p>
-                                    <button onClick={() => stopScanning()}>Cancel</button>
+                                <div className="scanner">
+                                    <p className="scanning_text"> </p>
+                                    <img src={qrscan} alt="qrscanner" className="qrscanner" />
+                                    <button className="cancel_button" onClick={() => stopScanning()} >Cancel</button>
                                 </div>
                                 :
-                                <button onClick={() => startScanning()}>
+                                <button onClick={() => startScanning()} className="qr_button">
                                     <img src={qr_icon} alt="qr" className="login-image" />
                                 </button>
                         }
@@ -111,7 +113,7 @@ const Login = () => {
                             <div className="inputs">
                                 <div className="input">
                                     <img src={email_icon} alt="" />
-                                    <input type="email" placeholder="Institutional Email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    <input type="email" placeholder="Email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
                                 </div>
                                 <div className="input">
                                     <img src={password_icon} alt="" />
