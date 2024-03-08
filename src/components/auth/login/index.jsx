@@ -98,7 +98,7 @@ const Login = () => {
                                 </div>
                                 :
                                 <button onClick={() => startScanning()}>
-                                    <img src={qr_icon} alt="Login Image" className="login-image" />
+                                    <img src={qr_icon} alt="qr" className="login-image" />
                                 </button>
                         }
 
