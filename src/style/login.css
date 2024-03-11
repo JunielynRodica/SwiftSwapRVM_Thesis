@@ -160,7 +160,7 @@
     color: #676767;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
     .container_login {
         flex-direction: column;
         /* Adjusted flex-direction for mobile view */

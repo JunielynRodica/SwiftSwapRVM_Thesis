@@ -71,7 +71,7 @@ link_text {
 
   .sidebar {
     width: 100%; /* Occupy the full width */
-    position: relative;
+    position: fixed;
     margin-right: 0;
   }
 }

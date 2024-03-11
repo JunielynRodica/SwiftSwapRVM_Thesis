@@ -12,7 +12,8 @@
   
   .container_dashboard{
     background-color: (848px at 10% 20%, rgba(174, 231, 165, 0.9) 0%, rgb(181, 205, 154) 90%);
-    padding-left: 280px;
+    /* padding-left: 280px; */
+    padding-left: 10%;
   }
   
   .header_dashboard {
@@ -27,6 +28,10 @@
   .header img {
     width: 150px; 
     margin-right: 20px;
+  }
+
+  .qr-intro{
+    text-align: center;
   }
   
   .header h1 {
