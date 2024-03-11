@@ -24,6 +24,16 @@
     position: relative;
 }
 
+@media (min-width:768px) {
+    .separator {
+        position: absolute;
+        height: 100%; 
+        width: 2px;
+        background-color: #3A4D39;
+        top: 0;
+        right: 0; 
+    }
+}
 .separator {
     position: absolute;
     height: 100%;
@@ -41,7 +51,33 @@
     background-color: transparent;
     border: none;
 }
-
+.qr_button{
+    border: none;
+    padding: 0;
+    background:none;
+    cursor: pointer;
+}
+.qrscanner{
+    margin: auto;
+    max-width: 85%;
+    height: auto;
+    margin-bottom: 20px;
+    background-color: transparent;
+    border: none;
+}
+.cancel_button{
+    width: 220px;
+    height: 59px;
+    color: #3A4D39;
+    background: #aeb0af;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    
+}
 .right-content {
     flex: 1;
     text-align: center;
