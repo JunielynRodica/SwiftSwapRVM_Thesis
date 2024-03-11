@@ -8,11 +8,11 @@
     justify-content: space-between;
     align-items: center;
     margin: auto;
-    margin-top: 200px;
+    margin-top: 100px;
     width: 70%;
-    
     background: rgb(251, 250, 225);
-    padding: 30px;
+    padding: 25px;
+    border-radius: 10px;
 }
 
 .left-content {
@@ -40,14 +40,14 @@
         width: 55%;
     }
 }
-.separator {
+/* .separator {
     position: absolute;
     height: 100%;
     width: 2px;
     background-color: #3A4D39;
     top: 0;
     right: 0;
-}
+} */
 
 .login-image {
     margin: auto;
@@ -87,6 +87,7 @@
 .right-content {
     flex: 1;
     text-align: center;
+
 }
 
 .header_login{

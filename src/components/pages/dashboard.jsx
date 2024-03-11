@@ -19,13 +19,14 @@ const Dashboard = () => {
 
   return (
     <div className="container_dashboard">
-      <header class="header_dashboard">
+      <div className="header_dashboard">
         <img src={rvmpic} alt='logo'></img>
         <h1>S W I F T S W A P</h1>
-      </header>
+      </div>
       <body>
         <div className='user'>
           <div>Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, it's nice to see you again!</div>
+          <div>SwiftSwap Points: 50</div>
           {/* <p className='user-welcome'>WELCOME BACK: USER 384782972</p>
             <p className='user-point'>SwiftSwap Points: 50</p> */}
         </div>

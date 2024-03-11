@@ -1,7 +1,7 @@
 .register{
     background: linear-gradient(109.6deg, rgb(251, 250, 225) 11.2%, rgb(206, 240, 185) 47.5%, rgb(100, 163, 111) 100.2%);
 }
-.register-container {
+/* .register-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -13,15 +13,15 @@
     height: 100%;
     background: rgb(251, 250, 225);
     
-}
-.separator {
+} */
+/*.separator {
     position: absolute;
     height: 100%;
-    width: 2px;
+    width: 5px;
     background-color: #3A4D39;
     top: 0;
     right: 0;
-}
+} */
 .header_register{
     text-align: center;
     margin-bottom: 20px; 
@@ -34,6 +34,7 @@
     padding-right: 10px;
     margin-right: 20px; 
     position: relative;
+    width:45%;
 }
 
 
@@ -58,6 +59,8 @@
 .right-content {
     flex: 1; 
     text-align: center;
+    width:55%;
+    
 }
 
 .header_register {
@@ -92,9 +95,10 @@
 .reg_inputs {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 10px;
     align-items: center;
     width: 100%;
+    
 }
 
 .reg_input input {
@@ -161,8 +165,10 @@
     align-items: center;
     flex-wrap:wrap;
     background: rgb(251, 250, 225);
-    padding:10px;
-    border-radius: 10px;
+    padding:20px;
+    border-radius: 10px; 
+    padding-right: 0px;
+    
 }
 .submit {
     width: 220px;

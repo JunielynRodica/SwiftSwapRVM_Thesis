@@ -34,7 +34,7 @@ const Register = () => {
                 <div className="inner-wrapper">
                     <div className="register_left">
                         <img src={rvmpic1} alt="reg" className="reg_icon" />
-                        <hr className="reg-separator" />
+                        {/* <hr className="reg-separator" /> */}
                     </div>
                     <div className="right-content">
                         <h3 className="header_register">Create a New Account</h3>
