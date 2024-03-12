@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import {deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc} from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_apiKey || "",
@@ -15,6 +16,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
+const fbfunctions = getFunctions(app);
 
 export class SingleTransaction {
     constructor(id = 0, datetime = new Date(), points = 0, type = "accumulated", item = "") {
@@ -26,7 +28,7 @@ export class SingleTransaction {
     }
 }
 
-export { app, auth };
+export { app, auth, fbfunctions };
 
 export const getCurrentUserPoints = async () => {
     let fs = getFirestore(app);
@@ -126,3 +128,29 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
     });
 }
 
+export const processPendingTransactions = async (uid) => {
+
+    // Process pending transactions during login step
+    const pending = await getDoc(doc(getFirestore(), "raspberry_pi_esp_32", uid));
+    if (pending.exists()) {
+        const data = pending.data();
+        const fs = getFirestore();
+        const userRef = doc(fs, "users/", uid);
+        const userDoc = await getDoc(userRef);
+        const user = userDoc.data();
+
+        // Create a new transaction for the pending points
+        const transaction = new SingleTransaction(user.transaction_history.length, new Date(), data.points, "Accumulated", "");
+
+        // Update user points and transaction history
+        user.transaction_history.push(transaction);
+
+        await updateDoc(userRef, {
+            points: user.points + data.points,
+            transaction_history: user.transaction_history
+        });
+
+        // Delete the pending transaction
+        await deleteDoc(pending.ref);
+    }
+}

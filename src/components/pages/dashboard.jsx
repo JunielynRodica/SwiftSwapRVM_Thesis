@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import QRCode from "react-qr-code";
 import '../../style/dashboard.css';
 import step1 from '../../assets/step1.png';
@@ -10,9 +10,18 @@ import step6 from '../../assets/step6.png';
 import rvmpic from '../../assets/rvmpic.png';
 import { useAuth } from '../../contexts/authContext';
 import { useQRStore } from "../../store/useQRCreds";
-
+import { getCurrentUserPoints } from "../../firebase/firebase";
 
 const Dashboard = () => {
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPoints(await getCurrentUserPoints());
+    }
+
+    fetchData();
+  }, []);
 
   const { currentUser } = useAuth()
   const { QRCreds } = useQRStore();
@@ -26,7 +35,7 @@ const Dashboard = () => {
       <body>
         <div className='user'>
           <div>Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, it's nice to see you again!</div>
-          <div>SwiftSwap Points: 50</div>
+          <div>SwiftSwap Points: {points}</div>
           {/* <p className='user-welcome'>WELCOME BACK: USER 384782972</p>
             <p className='user-point'>SwiftSwap Points: 50</p> */}
         </div>
@@ -45,7 +54,7 @@ const Dashboard = () => {
 
         <div style={{ height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
           {
-            QRCreds ? <QRCode
+            QRCreds != null ? <QRCode
               size={256}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
               value={QRCreds || ''}
