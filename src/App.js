@@ -4,6 +4,7 @@ import { useRoutes } from "react-router-dom";
 
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
+import ForgotPassword from "./components/auth/forgotpassword";
 
 import Dashboard from "./components/pages/dashboard";
 import Rewards from "./components/pages/rewards";
@@ -18,7 +19,7 @@ function App() {
     const routesArray = [
         {
             path: "*",
-            element: <Login/>,
+            element: <Login />,
         },
         {
             path: "/login",
@@ -27,6 +28,10 @@ function App() {
         {
             path: "/register",
             element: <Register />,
+        },
+        {
+            path: "/forgotPassword",
+            element: <ForgotPassword />,
         },
         {
             path: "/dashboard",
