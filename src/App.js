@@ -13,8 +13,24 @@ import TransactionHistory from "./components/pages/TransactionHistory";
 
 import './App.css';
 import { FaDashcube } from "react-icons/fa";
+import {connectAuthEmulator, getAuth} from "firebase/auth";
+import {connectFirestoreEmulator, getFirestore} from "firebase/firestore";
+import {connectFunctionsEmulator, getFunctions} from "firebase/functions";
+import {app} from "./firebase/firebase";
+
+let initOnce = false;
 
 function App() {
+
+    if (process.env.REACT_APP_EMULATED === "true") {
+        if (!initOnce) {
+            getAuth(app);
+            connectAuthEmulator(getAuth(app), "http://127.0.0.1:9099",);
+            connectFirestoreEmulator(getFirestore(app), "localhost", 8080);
+            connectFunctionsEmulator(getFunctions(app), "localhost", 5001);
+            initOnce = true;
+        }
+    }
 
     const routesArray = [
         {

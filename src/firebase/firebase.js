@@ -90,8 +90,6 @@ export const getCurrentUserTransactions = async () => {
     let _doc = await getDoc(doc(fs, "users/", user.uid));
     if (_doc.exists()) {
         return _doc.data().transaction_history.map((data) => {
-            console.log("TRANSACTION FETCHED")
-            console.log(data)
             return new SingleTransaction(data.id, new Date(data.datetime.toDate()), data.points, data.type, data.item);
         });
     }
@@ -105,8 +103,6 @@ export const addDeductTransactionToCurrentUser = async (item, points) => {
     let user = auth.currentUser;
 
     let transaction = new SingleTransaction(await getCurrentUserTransactions().length, new Date(), points, "redeem", item);
-    console.log("REDEEMING")
-    console.log(transaction)
     let currentTransactions = await getCurrentUserTransactions();
     currentTransactions.push(transaction);
 
@@ -131,8 +127,6 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
     let user = auth.currentUser;
 
     let transaction = new SingleTransaction(await getCurrentUserTransactions().length, new Date(), points, "accumulated");
-    console.log("INCREMENT TRANSACTION")
-    console.log(transaction)
     let currentTransactions = await getCurrentUserTransactions();
     currentTransactions.push(transaction)
 
