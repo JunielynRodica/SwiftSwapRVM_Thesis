@@ -14,11 +14,17 @@ import {
     addDeductTransactionToCurrentUser,
     getCurrentUserPoints,
 } from "../../firebase/firebase";
+import {isUserLoggedIn} from "../../firebase/auth";
+import {useNavigate} from "react-router-dom";
 
 const Rewards = () => {
     const [points, setPoints] = useState(0);
+    const nav = useNavigate();
 
     useEffect(() => {
+        if (!isUserLoggedIn())
+            nav('/login')
+
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());
         }

@@ -27,8 +27,11 @@ import {
 
 import CryptoJS from 'crypto-js';
 import {getFunctions, httpsCallable} from "firebase/functions";
-import app from "../App";
+import {startSessionTimeout, stopSessionTimeout} from "../contexts/sessionTimeoutHandler";
 
+// Default: 15 minutes
+                              // min * sec * millisec
+const sessionTimeoutMS = 15 * 60 * 1000;
 
 export const doCreateUserWithEmailAndPassword = async (email, password, studentNumber) => {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
@@ -52,16 +55,16 @@ export const doCreateUserWithEmailAndPassword = async (email, password, studentN
       })
     })
   });
+
+  startSessionTimeout(sessionTimeoutMS);
 };
 
 export const doSignInWithEmailAndPassword = async (email, password) => {
   const cred = await signInWithEmailAndPassword(auth, email, password);
 
-  const data_to_encrypt = cred.user.uid;
-  const encrypted = await CryptoJS.AES.encrypt(data_to_encrypt, process.env.REACT_APP_cryptokey).toString();
-
   await processPendingTransactions(cred.user.uid);
-  return { qr_encrypted: encrypted };
+  startSessionTimeout(sessionTimeoutMS);
+  return { qr_encrypted: getQRCodeData() };
 };
 
 export const doSignInWithCustomToken = async (access_token) => {
@@ -70,19 +73,20 @@ export const doSignInWithCustomToken = async (access_token) => {
   const server_token = await generateToken({ uid: decrypt });
 
   const cred = await signInWithCustomToken(auth, server_token.data);
-
-  const data_to_encrypt = cred.user.uid;
-
-  const encrypted = await CryptoJS.AES.encrypt(data_to_encrypt, process.env.REACT_APP_cryptokey).toString();
-
   await processPendingTransactions(cred.user.uid);
-  return { qr_encrypted: encrypted }
+  startSessionTimeout(sessionTimeoutMS);
+  return { qr_encrypted: getQRCodeData() }
 };
-
 
 export const doSignOut = () => {
+  stopSessionTimeout();
   return auth.signOut();
 };
+
+export const isUserLoggedIn = () => {
+  let user = auth.currentUser;
+  return user != null;
+}
 
 export const doPasswordReset = (email) => {
   return sendPasswordResetEmail(auth, email);
@@ -97,3 +101,13 @@ export const doSendEmailVerification = () => {
     url: `${window.location.origin}/dashboard`,
   });
 };
+
+export const getQRCodeData = () => {
+  if (!isUserLoggedIn())
+    return null;
+
+  const user = auth.currentUser;
+  const data_to_encrypt = user.uid;
+  const encrypted = CryptoJS.AES.encrypt(data_to_encrypt, process.env.REACT_APP_cryptokey).toString();
+  return encrypted;
+}
