@@ -23,6 +23,7 @@
     border-bottom: 4px solid #739072; 
     border-radius: 10px;
     margin-left: 2px;
+    flex-wrap: wrap;
   }
   
   .header img {

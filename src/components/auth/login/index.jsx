@@ -104,7 +104,7 @@ const Login = () => {
                                 </button>
                         }
 
-                        <hr className="separator" />
+                        {/* <hr className="separator" /> */}
 
                     </div>
                     <div className="right-content">
