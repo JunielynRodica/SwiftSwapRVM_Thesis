@@ -12,6 +12,7 @@ import qrscan from '../../../assets/qrscan.png';
 import '../../../style/login.css';
 
 import { useQRStore } from '../../../store/useQRCreds';
+import QrReader from 'react-qr-scanner'
 
 const Login = () => {
     const { userLoggedIn } = useAuth();
@@ -36,9 +37,8 @@ const Login = () => {
 
                 const { email, password } = JSON.parse(decrypted);
 
-                await doSignInWithEmailAndPassword(email, password).then((res) => {
-                    console.log('qr_encrypted save: ', res.qr_encrypted)
-                    saveQRCreds(res.qr_encrypted);
+                await doSignInWithEmailAndPassword(email, password).then(async (res) => {
+                    await saveQRCreds(res.qr_encrypted);
                 });
 
                 // await doSignInWithCustomToken(token).then((res) => {
@@ -53,7 +53,6 @@ const Login = () => {
         const qr_param = queryParameters.get('qrCreds') || null;
         if (qr_param) {
             checkParams(qr_param);
-            //console.log('token param: ', qr_param)
         }
     }, []);
 
@@ -61,8 +60,7 @@ const Login = () => {
         e.preventDefault();
         if (!isSigningIn) {
             setIsSigningIn(true);
-            await doSignInWithEmailAndPassword(email, password).then((res) => {
-                console.log('qr_encrypted: ', res.qr_encrypted)
+            await doSignInWithEmailAndPassword(email, password).then(async (res) => {
                 saveQRCreds(res.qr_encrypted);
             });
         }
@@ -72,16 +70,29 @@ const Login = () => {
         setScanning(true);
         const queryParameters = new URLSearchParams(window.location.search);
         queryParameters.set('scan', true);
-
         const newUrl = `${window.location.pathname}?${queryParameters.toString()}`;
         window.history.pushState({}, '', newUrl);
     }
 
     const stopScanning = () => {
         setScanning(false);
-
         const newUrl = `${window.location.pathname}`;
         window.history.pushState({}, '', newUrl);
+    }
+
+    const handleError = (e) => {
+        window.alert('Error scanning QR code, check console for errors');
+        console.error(e);
+    }
+
+    const handleScan = async (data) => {
+        if (isSigningIn) return;
+        if (data == null) return;
+
+        setIsSigningIn(true);
+        await doSignInWithCustomToken(data.text).then((res) => {
+            saveQRCreds(res.qr_encrypted);
+        });
     }
 
     return (
@@ -95,7 +106,11 @@ const Login = () => {
                             isScanning ?
                                 <div className="scanner">
                                     <p className="scanning_text"> </p>
-                                    <img src={qrscan} alt="qrscanner" className="qrscanner" />
+                                    <QrReader
+                                        delay={100}
+                                        onError={handleError}
+                                        onScan={handleScan}
+                                    />
                                     <button className="cancel_button" onClick={() => stopScanning()} >Cancel</button>
                                 </div>
                                 :
@@ -127,6 +142,7 @@ const Login = () => {
                                 </button>
                             </div>
                         </form>
+                        <p><Link to="/forgotpassword">Forgot Password</Link></p>
                         <p>Don't have an account? <Link to="/register">Sign up</Link></p>
                     </div>
                 </div>
