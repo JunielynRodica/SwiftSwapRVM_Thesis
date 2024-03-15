@@ -9,10 +9,12 @@
     align-items: center;
     margin: auto;
     margin-top: 100px;
-    width: 70%;
+    width: 75%;
     background: rgb(251, 250, 225);
-    padding: 25px;
-    border-radius: 10px;
+    padding: 10px;
+    padding-top:2%;
+    border-radius: 5px;
+    height:75%;
 }
 
 .left-content {
@@ -51,11 +53,12 @@
 
 .login-image {
     margin: auto;
-    max-width: 85%;
+    max-width: 80%;
     height: auto;
     margin-bottom: 20px;
     background-color: transparent;
     border: none;
+    
 }
 .qr_button{
     border: none;
@@ -70,6 +73,11 @@
     margin-bottom: 20px;
     background-color: transparent;
     border: none;
+}
+.scanner{
+padding-left: 15%;
+height: fit-content;
+width:auto;
 }
 .cancel_button{
     width: 220px;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Link, useSearchParams } from 'react-router-dom';
-
 import { useAuth } from '../../../contexts/authContext';
 
 const ForgotPassword = () => {
@@ -13,6 +12,7 @@ const ForgotPassword = () => {
 
             </main>
         </div>
+        
     );
 };
 
