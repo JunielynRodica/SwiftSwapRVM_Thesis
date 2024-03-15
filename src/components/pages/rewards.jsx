@@ -58,11 +58,7 @@ const Rewards = () => {
   <section id="features">
           <div className="product">
           <img src={bondpaper} alt=""/>
-<<<<<<< HEAD
-            <h3>Bondpaper</h3>
-=======
             <h3>Bond Paper</h3>
->>>>>>> 7d841edcd3df6038a289d2c3d837a72a6dd672df
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 1 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('bondpaper', 1)} disabled={points < 1}
   >Redeem </button>
