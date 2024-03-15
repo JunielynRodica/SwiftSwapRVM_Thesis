@@ -4,16 +4,21 @@ import {
     getCurrentUserTransactions,
     SingleTransaction
 } from '../../firebase/firebase';
+import {useNavigate} from "react-router-dom";
+import {isUserLoggedIn} from "../../firebase/auth";
 
 const TransactionHistory = () => {
     // { id: 1, date: '2024-02-27', time: '10:00', points: 50, type: 'accumulated', item: null },
     const [transactions, setTransactions] = useState([]);
     const [hasData, setHasData] = useState(false);
     const [output, setOutput] = useState("");
-
+    const nav = useNavigate();
 
     useEffect(() => {
         let internal_has_data = false;
+
+        if (!isUserLoggedIn())
+            nav('/login')
 
         const fetchData = async () => {
             await getCurrentUserTransactions().then((data) => {

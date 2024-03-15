@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import {deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc} from "firebase/firestore";
+import {isUserLoggedIn} from "./auth";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_apiKey || "",
@@ -31,6 +32,9 @@ export class SingleTransaction {
 export { app, auth, fbfunctions };
 
 export const getCurrentUserPoints = async () => {
+    if (!isUserLoggedIn())
+        return null;
+
     let fs = getFirestore(app);
     let user = auth.currentUser;
 
@@ -41,6 +45,9 @@ export const getCurrentUserPoints = async () => {
 }
 
 export const setCurrentUserPoints = async (points) => {
+    if (!isUserLoggedIn())
+        return null;
+
     let fs = getFirestore(app);
     let user = auth.currentUser;
 
@@ -50,6 +57,9 @@ export const setCurrentUserPoints = async (points) => {
 }
 
 export const deductCurrentUserPoints = async (points) => {
+    if (!isUserLoggedIn())
+        return null;
+
     let fs = getFirestore(app);
     let user = auth.currentUser;
 
@@ -59,6 +69,9 @@ export const deductCurrentUserPoints = async (points) => {
 }
 
 export const addCurrentUserPoints = async (points) => {
+    if (!isUserLoggedIn())
+        return null;
+
     let fs = getFirestore(app);
     let user = auth.currentUser;
 
@@ -68,26 +81,28 @@ export const addCurrentUserPoints = async (points) => {
 }
 
 export const getCurrentUserTransactions = async () => {
+    if (!isUserLoggedIn())
+        return null;
+
     let fs = getFirestore(app);
     let user = auth.currentUser;
 
     let _doc = await getDoc(doc(fs, "users/", user.uid));
     if (_doc.exists()) {
         return _doc.data().transaction_history.map((data) => {
-            console.log("TRANSACTION FETCHED")
-            console.log(data)
             return new SingleTransaction(data.id, new Date(data.datetime.toDate()), data.points, data.type, data.item);
         });
     }
 }
 
 export const addDeductTransactionToCurrentUser = async (item, points) => {
+    if (!isUserLoggedIn())
+        return null;
+
     let fs = getFirestore(app);
     let user = auth.currentUser;
 
     let transaction = new SingleTransaction(await getCurrentUserTransactions().length, new Date(), points, "redeem", item);
-    console.log("REDEEMING")
-    console.log(transaction)
     let currentTransactions = await getCurrentUserTransactions();
     currentTransactions.push(transaction);
 
@@ -105,12 +120,13 @@ export const addDeductTransactionToCurrentUser = async (item, points) => {
     });
 }
 export const addIncrementTransactionToCurrentUser = async (points) => {
+    if (!isUserLoggedIn())
+        return null;
+
     let fs = getFirestore(app);
     let user = auth.currentUser;
 
     let transaction = new SingleTransaction(await getCurrentUserTransactions().length, new Date(), points, "accumulated");
-    console.log("INCREMENT TRANSACTION")
-    console.log(transaction)
     let currentTransactions = await getCurrentUserTransactions();
     currentTransactions.push(transaction)
 
@@ -129,6 +145,8 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
 }
 
 export const processPendingTransactions = async (uid) => {
+    if (!isUserLoggedIn())
+        return null;
 
     // Process pending transactions during login step
     const pending = await getDoc(doc(getFirestore(), "raspberry_pi_esp_32", uid));

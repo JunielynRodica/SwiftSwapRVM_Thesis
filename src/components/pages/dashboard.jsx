@@ -11,11 +11,21 @@ import rvmpic from '../../assets/rvmpic.png';
 import { useAuth } from '../../contexts/authContext';
 import { useQRStore } from "../../store/useQRCreds";
 import { getCurrentUserPoints } from "../../firebase/firebase";
+import Login from "../auth/login";
+import {useNavigate} from "react-router-dom";
+import {isUserLoggedIn} from "../../firebase/auth";
 
 const Dashboard = () => {
   const [points, setPoints] = useState(0);
+  const nav = useNavigate();
+
+  const { currentUser } = useAuth()
+  const { QRCreds } = useQRStore();
 
   useEffect(() => {
+    if (!isUserLoggedIn())
+      nav('/login');
+
     const fetchData = async () => {
       setPoints(await getCurrentUserPoints());
     }
@@ -23,8 +33,9 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const { currentUser } = useAuth()
-  const { QRCreds } = useQRStore();
+  if (currentUser == null) {
+    return <Login />
+  }
 
   return (
     <div className="container_dashboard">

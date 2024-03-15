@@ -14,11 +14,17 @@ import {
     addDeductTransactionToCurrentUser,
     getCurrentUserPoints,
 } from "../../firebase/firebase";
+import {isUserLoggedIn} from "../../firebase/auth";
+import {useNavigate} from "react-router-dom";
 
 const Rewards = () => {
     const [points, setPoints] = useState(0);
+    const nav = useNavigate();
 
     useEffect(() => {
+        if (!isUserLoggedIn())
+            nav('/login')
+
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());
         }
@@ -27,15 +33,18 @@ const Rewards = () => {
     }, []);
 
     const handleRedeem = (productName, requiredPoints) => {
-      console.log(`Attempting to redeem ${productName}...`);
-      if (points >= requiredPoints) {
-          setPoints(points - requiredPoints); // Update points after redemption
-          addDeductTransactionToCurrentUser(productName, requiredPoints); // Add transaction to user account
-          alert(`Redeeming ${productName}`);
-      } else {
-          alert("Points insufficient! You cannot redeem this product.");
+      const confirmed = window.confirm(`Are you sure you want to redeem ${productName}?`);
+      if (confirmed) {
+          console.log(`Attempting to redeem ${productName}...`);
+          if (points >= requiredPoints) {
+              setPoints(points - requiredPoints); // Update points after redemption
+              addDeductTransactionToCurrentUser(productName, requiredPoints); // Add transaction to user account
+              alert(`Redeeming ${productName}`);
+          } else {
+              alert("Points insufficient! You cannot redeem this product.");
+          }
       }
-    };
+  };
   
   
     return (
@@ -49,7 +58,11 @@ const Rewards = () => {
   <section id="features">
           <div className="product">
           <img src={bondpaper} alt=""/>
+<<<<<<< HEAD
             <h3>Bondpaper</h3>
+=======
+            <h3>Bond Paper</h3>
+>>>>>>> 7d841edcd3df6038a289d2c3d837a72a6dd672df
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 1 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('bondpaper', 1)} disabled={points < 1}
   >Redeem </button>
