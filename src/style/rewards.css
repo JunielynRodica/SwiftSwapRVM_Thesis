@@ -34,7 +34,8 @@ body_rewards {
     background: linear-gradient(to right, #ECE3CE, #71a46f);
     border-bottom: 4px solid #739072; 
     border-radius: 10px;
-    margin-left: 280px;
+    margin-left: 100px;
+    flex-wrap: wrap;
   }
 
   .rewards_img{
@@ -43,12 +44,20 @@ body_rewards {
   }
   
   #features {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    /* display: grid;
     gap: 20px;
     padding: 90px 50px 75px 100px;
+    margin-left: 240px; */
+    display: grid;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    max-width: 1400px;
+    margin: 20px auto; 
+    padding: 20px;
+    padding-left: 10%;
     text-align: center;
-    margin-left: 240px;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   }
   
   .redeem-btn {

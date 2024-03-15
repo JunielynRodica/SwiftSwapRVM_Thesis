@@ -40,18 +40,16 @@ const Rewards = () => {
   
     return (
       <div className="rewards_body">
-         <header class="header_rewards">
+         <div class="header_rewards">
             <img src={rvmpic} alt="logo"></img>
             <h1>S W I F T S W A P | R E W A R D S</h1>
-      </header>
+      </div>
         
   
   <section id="features">
-          
-  
           <div className="product">
           <img src={bondpaper} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Bondpaper</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 1 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('bondpaper', 1)} disabled={points < 1}
   >Redeem </button>
@@ -59,7 +57,7 @@ const Rewards = () => {
   
              <div className="product">
           <img src={ballpen} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Ballpen</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('ballpen', 5)} disabled={points < 5}
   >Redeem </button>
@@ -67,15 +65,15 @@ const Rewards = () => {
   
              <div className="product">
           <img src={correctiontape} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Correction Tape</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('correctiontape', 5)} disabled={points < 5}
   >Redeem </button>
           </div>
-  
+
           <div className="product">
           <img src={eraser} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Eraser</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('eraser', 5)} disabled={points < 5}
   >Redeem </button>
@@ -83,7 +81,7 @@ const Rewards = () => {
   
           <div className="product">
           <img src={highlighter} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Highlighter</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('highlighter', 5)} disabled={points < 5}
   >Redeem </button>
@@ -91,7 +89,7 @@ const Rewards = () => {
   
           <div className="product">
           <img src={notebook} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Notebook</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('notebook', 5)} disabled={points < 5}
   >Redeem </button>
@@ -99,7 +97,7 @@ const Rewards = () => {
   
           <div className="product">
           <img src={paperclip} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Paper Clip</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('paperclip', 5)} disabled={points < 5}
   >Redeem </button>
@@ -107,7 +105,7 @@ const Rewards = () => {
   
           <div className="product">
           <img src={pencil} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Pencil</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('pencil', 5)} disabled={points < 5}
   >Redeem </button>
@@ -115,7 +113,7 @@ const Rewards = () => {
   
           <div className="product">
           <img src={stickynote} alt=""/>
-            <h3>Feature 1</h3>
+            <h3>Sticky Note</h3>
             <p>You need to accumulate 5 points to get three pencils</p>
             <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('stickynote', 5)} disabled={points < 5}
   >Redeem </button>

@@ -68,7 +68,7 @@ const Sidebar = ({ children }) => {
                     currentUser
                         ?
                         <>
-                        <div  className="logout_button" style={{ display: isOpen ? "block" : "none", justifyContent: 'center', marginTop: '290px', marginLeft: '50px', }}>
+                        <div  className="logout_button" style={{ display: isOpen ? "block" : "none", justifyContent: 'center', marginTop: '200px', marginLeft: '50px', }}>
                         <button 
                             onClick={() => { 
                                 doSignOut().then(() => { 
