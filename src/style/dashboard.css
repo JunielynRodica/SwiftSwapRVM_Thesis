@@ -57,13 +57,13 @@
     color: #3A4D39; 
   }
   
-  .intro {
+  .intro, .points {
     text-align: center;
     font-size: 18px; 
     color: #3A4D39; 
   }
   
-  .how-to {
+  .how-to, .input-points {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -73,7 +73,7 @@
     padding: 20px;
   }
   
-  .how-to img {
+  .how-to img, .input-points img {
     width: 100%;
     max-width: 350px;
     height: auto;

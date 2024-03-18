@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from "react";
 import QRCode from "react-qr-code";
 import '../../style/dashboard.css';
+import input1 from '../../assets/clearS.png';
+import input2 from '../../assets/clearM.png';
+import input3 from '../../assets/clearL.png';
+import input4 from '../../assets/colored.png';
+import input5 from '../../assets/aluminumC.png';
+import input6 from '../../assets/paper.png';
+
 import step1 from '../../assets/step1.png';
 import step2 from '../../assets/step2.png';
 import step3 from '../../assets/step3.png';
@@ -65,6 +72,19 @@ const Dashboard = () => {
           }
         </div>
         <br></br>
+
+        <section className="points">
+          <h1 className="equivalents">LET US MAKE EVERY INPUT COUNT!</h1>
+          <p className="sentence2">We're excited for you to experience our project! Here are the equivalent points per item!</p>
+        </section>
+        <div className="input-points">
+        <img src={input1} alt="step1"></img>
+          <img src={input2} alt="step2"></img>
+          <img src={input3} alt="step3"></img>
+          <img src={input4} alt="step4"></img>
+          <img src={input5} alt="step5"></img>
+          <img src={input6} alt="step6"></img>
+        </div>
 
         <section className="intro">
           <h1 className="welcome">HI, WHAT ARE YOU RECYCLING TODAY?</h1>
