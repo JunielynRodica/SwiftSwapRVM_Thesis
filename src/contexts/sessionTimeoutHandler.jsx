@@ -1,9 +1,9 @@
 import {doSignOut} from "../firebase/auth";
 
-let sessionInterval = {}
+let sessionTimeout = {}
 
 export function startSessionTimeout(time) {
-    sessionInterval = setInterval(() => {
+    sessionTimeout = setTimeout(() => {
         doSignOut().then(() => {
             stopSessionTimeout();
             window.location.reload();
@@ -12,5 +12,5 @@ export function startSessionTimeout(time) {
 }
 
 export function stopSessionTimeout() {
-    clearInterval(sessionInterval);
+    clearTimeout(sessionTimeout);
 }

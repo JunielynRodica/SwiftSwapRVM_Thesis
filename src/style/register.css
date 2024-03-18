@@ -51,9 +51,11 @@
 
 .reg_icon {
     margin: auto;
-    max-width: 85%;
+    max-width: 130%;
     height: auto;
     margin-bottom: 20px;
+    padding-right:0;
+    padding-left:10%;
 }
 
 .right-content {
@@ -162,7 +164,8 @@
     flex-wrap:wrap;
     background: rgb(251, 250, 225);
     padding:10px;
-    border-radius: 10px;
+    border-radius: 5px;
+    height:75%;
 }
 .submit {
     width: 220px;

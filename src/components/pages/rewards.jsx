@@ -49,10 +49,13 @@ const Rewards = () => {
   
     return (
       <div className="rewards_body">
-         <div class="header_rewards">
-            <img src={rvmpic} alt="logo"></img>
-            <h1>S W I F T S W A P | R E W A R D S</h1>
+      <div className="header_rewards">
+        <img src={rvmpic} alt="logo" />
+        <h1>S W I F T S W A P | R E W A R D S <br />
+        Your Total SwiftSwap Points is: {points} points 
+        </h1>
       </div>
+    
         
   
   <section id="features">
