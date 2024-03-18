@@ -13,6 +13,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
+    height: 60%;
 }
 
 .forgotLogo {
@@ -67,3 +68,17 @@
     background-color: #45a049;
 }
 
+.forgetInput p {
+  position: absolute;
+  bottom: 22%; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  }
+  
+  .forgetInput p a {
+    color: darkmagenta; 
+    text-decoration: none; 
+  }
+  .forgetInput p a:hover {
+    text-decoration: underline;
+  }

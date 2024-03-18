@@ -22,6 +22,7 @@ const ForgotPassword = () => {
                     <img src={emailIcon}></img>
                     <input className='forgetEmail' type='email' required placeholder='Enter Email here.' ></input>
                     <input className='forgotButton' type='submit' value='Reset Password'></input>
+                    <p>Go back to <Link to="/login">Log in</Link></p>
                     </div>
                 </div>
             </div>
