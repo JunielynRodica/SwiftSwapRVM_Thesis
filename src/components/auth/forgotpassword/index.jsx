@@ -5,9 +5,19 @@ import emailIcon from '../../../assets/Email.png';
 import '../../../style/forgotpw.css'
 
 import { useAuth } from '../../../contexts/authContext';
+import {useNavigate} from "react-router-dom";
+import {doPasswordReset} from "../../../firebase/auth";
 
 const ForgotPassword = () => {
     const { userLoggedIn } = useAuth();
+    const nav= useNavigate();
+    const [email, setEmail] = useState('');
+
+    const requestPasswordReq = async (e) => {
+        e.preventDefault();
+        await doPasswordReset(email);
+        nav('/login');
+    }
 
     return (
         <main>
@@ -20,8 +30,10 @@ const ForgotPassword = () => {
                     <br></br>
                     <div className='forgetInput'>
                     <img src={emailIcon}></img>
-                    <input className='forgetEmail' type='email' required placeholder='Enter Email here.' ></input>
-                    <input className='forgotButton' type='submit' value='Reset Password'></input>
+                        <form onSubmit={requestPasswordReq} style={{display: "flex"}}>
+                            <input className='forgetEmail' type='email' required placeholder='Enter Email here.' onChange={(e) => setEmail(e.target.value)}></input>
+                            <input className='forgotButton' type='submit' value='Reset Password'></input>
+                        </form>
                     <p>Go back to <Link to="/login">Log in</Link></p>
                     </div>
                 </div>
