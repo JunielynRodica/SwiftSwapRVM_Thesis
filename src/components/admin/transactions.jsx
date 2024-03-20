@@ -2,47 +2,48 @@ import React, {useEffect} from "react";
 import registered_users from '../../assets/registered_user.png';
 import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
-import {NavLink, useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
 
-const Admin = () => {
+const Transactions = () => {
 
 const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isUserLoggedIn()) {
-            navigate('/login');
-        }
+        isUserLoggedIn().then((logInResult) => {
 
-        if (!isUserAdmin()) {
-            navigate('/dashboard');
-        }
+            if (!logInResult) {
+                navigate('/login');
+            }
+
+            isUserAdmin().then((adminResult) => {
+                if (!adminResult) {
+                    navigate('/dashboard');
+                }
+            })
+        });
     }, []);
 
     return (
         <div className="admin_body">
-            <div className="admin_rewards">
-                <img src={rvmpic} alt="logo" />
-                <h1>S W I F T S W A P | A D M I N </h1>
-            </div>
- 
-        <section id="admin_feature">
-            <div className="access">
-                <NavLink to={"/admin/accounts"}>
-                    <img src={registered_users} alt=""/>
-                </NavLink>
-            </div>
-
-            <div className="access">
-                <NavLink to={"/admin/transactions"}>
-                    <img src={user_transaction} alt=""/>
-                </NavLink>
-              </div>
-
-          </section>
-
+        <div className="admin_rewards">
+          <img src={rvmpic} alt="logo" />
+          <h1>S W I F T S W A P | A D M I N </h1>
         </div>
-
+ 
+    <section id="admin_feature">
+            <div className="access">
+            <img src={registered_users} alt=""/>
+            <button className="user-access-btn" onClick={handleAdminAccess}>Access</button>
+              </div>
+    
+            <div className="access">
+            <img src={user_transaction} alt=""/>
+            <button className="user-transac-btn" onClick={handleAdminAccess}>Access</button>
+              </div>
+          </section>
+        </div>
+       
      // <div className="user-table-container">
         //   <h2>User Logs</h2>
         //   <div className="user-table-wrapper">
@@ -51,7 +52,7 @@ const navigate = useNavigate();
         //         <tr>
         //           <th>Employee/ Student Number</th>
         //           <th>Email</th>
-        //           <th>User ID</th>
+        //           <th>User ID</th>        
         //         </tr>
         //       </thead>
         //     </table>

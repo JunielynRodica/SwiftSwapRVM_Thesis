@@ -17,6 +17,7 @@ import {connectAuthEmulator, getAuth} from "firebase/auth";
 import {connectFirestoreEmulator, getFirestore} from "firebase/firestore";
 import {connectFunctionsEmulator, getFunctions} from "firebase/functions";
 import {app} from "./firebase/firebase";
+import Admin from "./components/admin/admin";
 
 let initOnce = false;
 
@@ -64,6 +65,18 @@ function App() {
         {
             path: "/about",
             element: <About />,
+        },
+        {
+            path: "/admin",
+            element: <Admin />
+        },
+        {
+            path: "/admin/accounts",
+            element: <Accounts />,
+        },
+        {
+            path: "/admin/transactions",
+            element: <Transactions />,
         },
     ];
     let routesElement = useRoutes(routesArray);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     FaBars,
     FaClipboard,
@@ -12,7 +12,8 @@ import { useAuth } from "../contexts/authContext";
 
 
 
-import { doSignOut } from '../firebase/auth'
+import {doSignOut, isUserAdmin} from '../firebase/auth'
+import {FaGear} from "react-icons/fa6";
 
 const Sidebar = ({ children }) => {
 
@@ -20,6 +21,20 @@ const Sidebar = ({ children }) => {
     const navigate = useNavigate()
 
     const [isOpen, setIsOpen] = useState(false);
+    const [adminUser, setAdminUser] = useState(false);
+
+    useEffect(() => {
+        async function getIsUserAdmin() {
+            await isUserAdmin().then((result) => {
+                if (result) {
+                    setAdminUser(true);
+                }
+            })
+        }
+
+        getIsUserAdmin();
+    }, []);
+
     const toggle = () => setIsOpen(!isOpen);
 
     const menuItem = [
@@ -43,10 +58,20 @@ const Sidebar = ({ children }) => {
             name: 'About',
             icon: <FaUsers />,
         },
+        {
+            path: '/admin',
+            name: 'Admin',
+            icon: <FaGear />,
+        },
     ];
 
     // Filter out "Signin" and "Signup" items
     const filteredMenuItems = menuItem.filter(item => item.path !== '/signin' && item.path !== '/signup');
+
+    // Filter the admin page if the user is not an admin
+    if (!adminUser) {
+        filteredMenuItems.pop();
+    }
 
     return (
         <div className="container_sidebar">

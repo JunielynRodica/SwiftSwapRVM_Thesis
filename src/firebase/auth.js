@@ -88,6 +88,33 @@ export const isUserLoggedIn = () => {
   return user != null;
 }
 
+export const isUserAdmin = async () => {
+  let user = auth.currentUser;
+  console.log("ISUSERADMIN CALLED")
+  if (user == null) return false;
+
+  let isadmin = await getDoc(doc(getFirestore(), "users/", user.uid)).then((doc) => { return doc.data().isadmin });
+  console.log(isadmin);
+  return isadmin;
+}
+
+export const getAllUsers = async () => {
+  console.log("GETALLUSERS CALLED")
+  const getAuthUsers = httpsCallable(fbfunctions, "getAllUsers");
+  const getFirebaseUsers = httpsCallable(fbfunctions, "getFirebaseUser");
+
+  const authUsers = await getAuthUsers();
+  const users = []
+
+  for (const uid of authUsers.data) {
+    const firebaseUser = await getFirebaseUsers({ uid: uid });
+    users.push(JSON.stringify(firebaseUser.data + { uid }));
+  }
+
+  console.log(users)
+  return users.data;
+}
+
 export const doPasswordReset = (email) => {
   return sendPasswordResetEmail(auth, email);
 };
