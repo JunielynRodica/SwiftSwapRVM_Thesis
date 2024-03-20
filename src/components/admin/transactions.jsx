@@ -82,4 +82,4 @@ const navigate = useNavigate();
       );
     };
 
-    export default Admin;
+    export default Transactions;
