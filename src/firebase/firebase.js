@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import {getFunctions, httpsCallable} from "firebase/functions";
 import {deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc} from "firebase/firestore";
 import {isUserLoggedIn} from "./auth";
 
@@ -43,6 +43,16 @@ export const getCurrentUserPoints = async () => {
         return _doc.data().points;
     }
 }
+
+export const getAllTransactions = async () => {
+    const getTransactions = httpsCallable(fbfunctions, "getAllTransactions");
+    console.log("Getting all transactions");
+    let data = await getTransactions();
+    console.log(data.data);
+
+    return data.data;
+}
+
 
 export const setCurrentUserPoints = async (points) => {
     if (!isUserLoggedIn())

@@ -36,7 +36,9 @@ const sessionTimeoutMS = 15 * 60 * 1000;
 export const doCreateUserWithEmailAndPassword = async (email, password, studentNumber) => {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   const fs = getFirestore();
+  console.log("CREATING ACCOUNT WITH STUDENT NUMBER " + studentNumber)
   await setDoc(doc(fs, "users/", cred.user.uid), {
+    isAdmin: false,
     email: email,
     studentNumber: studentNumber,
     uid: cred.user.uid,
@@ -100,19 +102,21 @@ export const isUserAdmin = async () => {
 
 export const getAllUsers = async () => {
   console.log("GETALLUSERS CALLED")
-  const getAuthUsers = httpsCallable(fbfunctions, "getAllUsers");
+  const getUserUids = httpsCallable(fbfunctions, "getAllUsers");
   const getFirebaseUsers = httpsCallable(fbfunctions, "getFirebaseUser");
+  const getUserEmail = httpsCallable(fbfunctions, "getUserEmail");
 
-  const authUsers = await getAuthUsers();
+  const authUids = await getUserUids();
   const users = []
 
-  for (const uid of authUsers.data) {
-    const firebaseUser = await getFirebaseUsers({ uid: uid });
-    users.push(JSON.stringify(firebaseUser.data + { uid }));
+  for (let i = 0; i < authUids.data.length; i++) {
+    const firebaseUser = await getFirebaseUsers({ uid: authUids.data[i] });
+    const email = await getUserEmail({ uid: authUids.data[i]});
+    users.push(JSON.stringify({ email: email, uid: authUids.data[i], firebasedata: firebaseUser.data }));
   }
 
   console.log(users)
-  return users.data;
+  return users;
 }
 
 export const doPasswordReset = (email) => {

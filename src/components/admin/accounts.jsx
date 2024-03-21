@@ -1,27 +1,32 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import registered_users from '../../assets/registered_user.png';
 import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
 import { useNavigate } from 'react-router-dom';
-import {isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
+import {getAllUsers, isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
 
 const Accounts = () => {
 
 const navigate = useNavigate();
 
+    const [accounts, setAccounts] = useState([]);
+
     useEffect(() => {
-        isUserLoggedIn().then((logInResult) => {
+        if (!isUserLoggedIn()) {
+            navigate('/login')
+        }
 
-            if (!logInResult) {
-                navigate('/login');
-            }
+        if (!isUserAdmin()) {
+            navigate('/dashboard')
+        }
 
-            isUserAdmin().then((adminResult) => {
-                if (!adminResult) {
-                    navigate('/dashboard');
-                }
-            })
-        });
+        async function populateData() {
+            let data = await getAllUsers();
+            console.log(data);
+            setAccounts(data);
+        }
+
+        populateData();
     }, []);
 
     return (
@@ -30,7 +35,7 @@ const navigate = useNavigate();
           <img src={rvmpic} alt="logo" />
           <h1>S W I F T S W A P | A C C O U N T S </h1>
         </div>
- 
+
     <section id="admin_feature">
 
         <div className="user-table-container">
@@ -40,10 +45,24 @@ const navigate = useNavigate();
                <thead>
              <tr>
                    <th>Employee/ Student Number</th>
+                   <th>Points</th>
                    <th>Email</th>
                    <th>User ID</th>
                  </tr>
            </thead>
+                 <tbody>
+                 {accounts.length > 0 ? accounts.map((account) => {
+                     account = JSON.parse(account);
+                        return (
+                            <tr>
+                                <td>{account.firebasedata.studentNumber}</td>
+                                <td>{account.firebasedata.points}</td>
+                                <td>{account.email.data}</td>
+                                <td>{account.uid}</td>
+                            </tr>
+                        )
+                 }) : <tr><td colSpan="3">Data is loading, please wait...</td></tr> }
+                 </tbody>
              </table>
            </div>
          </div>
@@ -51,7 +70,7 @@ const navigate = useNavigate();
 
     </section>
         </div>
-       
+
 
         // <div className="transaction-table-container">
         //   <h2>Transaction Histories</h2>

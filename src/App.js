@@ -18,6 +18,9 @@ import {connectFirestoreEmulator, getFirestore} from "firebase/firestore";
 import {connectFunctionsEmulator, getFunctions} from "firebase/functions";
 import {app} from "./firebase/firebase";
 import Admin from "./components/admin/admin";
+import Accounts from "./components/admin/accounts";
+import Transactions from "./components/admin/transactions";
+import {doCreateUserWithEmailAndPassword} from "./firebase/auth";
 
 let initOnce = false;
 
@@ -29,6 +32,7 @@ function App() {
             connectAuthEmulator(getAuth(app), "http://127.0.0.1:9099",);
             connectFirestoreEmulator(getFirestore(app), "localhost", 8080);
             connectFunctionsEmulator(getFunctions(app), "localhost", 5001);
+            doCreateUserWithEmailAndPassword("admin@gmail.com", "password", 1234);
             initOnce = true;
         }
     }
