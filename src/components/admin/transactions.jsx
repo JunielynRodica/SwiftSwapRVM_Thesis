@@ -5,7 +5,7 @@ import user_transaction from '../../assets/user_transaction.png';
 import { useNavigate } from 'react-router-dom';
 import {isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
 import {getAllTransactions} from "../../firebase/firebase";
-
+import '../../style/transactions.css';
 const Transactions = () => {
 
 const navigate = useNavigate();
@@ -33,18 +33,17 @@ const navigate = useNavigate();
 
     return (
         <div className="admin_body">
-        <div className="admin_rewards">
+        <div className="header_admin">
           <img src={rvmpic} alt="logo" />
-          <h1>S W I F T S W A P | A D M I N </h1>
+          <h1>S W I F T S W A P | T R A N S A C T I O N S </h1>
         </div>
 
             <section id="admin_feature">
 
-
-                <div className="transaction-table-container">
-                    <h2>Transaction Histories</h2>
-                    <div className="transaction-table-wrapper">
-                        <table className="transaction-table">
+                <div className="transactions-table-container">
+                    <h2>User Transaction Histories</h2>
+                    <div className="transactions-table-wrapper">
+                        <table className="transactions-table">
                             <thead>
                             <tr>
                                 <th>User</th>
@@ -70,7 +69,7 @@ const navigate = useNavigate();
                                     </tr>
                                 )
                             }) : <tr>
-                                <td colSpan="5">No transaction history available</td>
+                                <td colSpan="6">No transaction history available</td>
                             </tr>}
                             </tbody>
                         </table>

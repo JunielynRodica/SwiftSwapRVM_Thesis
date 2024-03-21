@@ -4,6 +4,7 @@ import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
 import {NavLink, useNavigate} from 'react-router-dom';
 import {isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
+import "../../style/admin.css";
 
 const Admin = () => {
 
@@ -21,7 +22,7 @@ const navigate = useNavigate();
 
     return (
         <div className="admin_body">
-            <div className="admin_rewards">
+            <div className="header_admin">
                 <img src={rvmpic} alt="logo" />
                 <h1>S W I F T S W A P | A D M I N </h1>
             </div>

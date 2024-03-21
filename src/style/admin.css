@@ -1,0 +1,45 @@
+
+.admin_body {
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Styles for the header */
+  .header_admin {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to right, #ECE3CE, #71a46f);
+    border-bottom: 4px solid #739072; 
+    border-radius: 10px;
+    margin-left: 100px;
+    flex-wrap: wrap;
+    
+  }
+  
+  .header_admin img {
+    width: 150px; 
+    margin-right: 20px;
+  }
+  
+  .header_admin h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Styles for the admin features section */
+  #admin_feature {
+    display: flex;
+    justify-content: center;
+    padding-top:20px;
+  }
+  
+  .access {
+    margin: 0 10px;
+  }
+  
+  .access img {
+    width: 75%; 
+    height: auto;
+    
+  }
+  
