@@ -38,7 +38,7 @@ export const doCreateUserWithEmailAndPassword = async (email, password, studentN
   const fs = getFirestore();
   console.log("CREATING ACCOUNT WITH STUDENT NUMBER " + studentNumber)
   await setDoc(doc(fs, "users/", cred.user.uid), {
-    isAdmin: false,
+    isadmin: false,
     email: email,
     studentNumber: studentNumber,
     uid: cred.user.uid,
@@ -48,11 +48,11 @@ export const doCreateUserWithEmailAndPassword = async (email, password, studentN
 
   // Add transactions for testing
   // TODO: Testing Data
-  addIncrementTransactionToCurrentUser(40).then(() => {
-    addIncrementTransactionToCurrentUser(50).then(() => {
-      addIncrementTransactionToCurrentUser(40).then(() => {
-        addIncrementTransactionToCurrentUser(40).then(() => {
-          addIncrementTransactionToCurrentUser(20)
+  addIncrementTransactionToCurrentUser(1).then(() => {
+    addIncrementTransactionToCurrentUser(2).then(() => {
+      addIncrementTransactionToCurrentUser(3).then(() => {
+        addIncrementTransactionToCurrentUser(2).then(() => {
+          addIncrementTransactionToCurrentUser(1)
         })
       })
     })

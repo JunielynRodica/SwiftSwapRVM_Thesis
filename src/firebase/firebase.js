@@ -63,7 +63,7 @@ export const setCurrentUserPoints = async (points) => {
 
     await setDoc(doc(fs, "users/", user.uid), {
         points: await getCurrentUserPoints() + points
-    });
+    }, { merge: true });
 }
 
 export const deductCurrentUserPoints = async (points) => {
@@ -75,7 +75,7 @@ export const deductCurrentUserPoints = async (points) => {
 
     await setDoc(doc(fs, "users/", user.uid), {
         points: await getCurrentUserPoints() - points
-    });
+    }, { merge: true });
 }
 
 export const addCurrentUserPoints = async (points) => {
@@ -87,7 +87,7 @@ export const addCurrentUserPoints = async (points) => {
 
     await setDoc(doc(fs, "users/", user.uid), {
         points: await getCurrentUserPoints() + points
-    });
+    }, { merge: true });
 }
 
 export const getCurrentUserTransactions = async () => {
@@ -127,7 +127,7 @@ export const addDeductTransactionToCurrentUser = async (item, points) => {
                 item: transaction.item
             }
         })
-    });
+    }, { merge: true });
 }
 export const addIncrementTransactionToCurrentUser = async (points) => {
     if (!isUserLoggedIn())
@@ -151,7 +151,7 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
                 item: transaction.item
             }
         })
-    });
+    }, { merge: true });
 }
 
 export const processPendingTransactions = async (uid) => {
