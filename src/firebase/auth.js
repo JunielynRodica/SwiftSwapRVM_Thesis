@@ -71,8 +71,18 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
 
 export const doSignInWithCustomToken = async (access_token) => {
   const decrypt = await CryptoJS.AES.decrypt(access_token, process.env.REACT_APP_cryptokey).toString(CryptoJS.enc.Utf8);
+  const uid = decrypt.split('|')[0];
+  const validity = decrypt.split('|')[1];
+
+  console.log("QR LOGIN ATTEMPT")
+
+    if (validity < new Date().getTime()) {
+      console.log("QR CODE EXPIRED")
+      return null;
+    }
+
   const generateToken = httpsCallable(fbfunctions, "generateLoginToken");
-  const server_token = await generateToken({ uid: decrypt });
+  const server_token = await generateToken({ uid: uid });
 
   const cred = await signInWithCustomToken(auth, server_token.data);
   await processPendingTransactions(cred.user.uid);
@@ -139,6 +149,12 @@ export const getQRCodeData = () => {
 
   const user = auth.currentUser;
   const data_to_encrypt = user.uid;
-  const encrypted = CryptoJS.AES.encrypt(data_to_encrypt, process.env.REACT_APP_cryptokey).toString();
+
+  // 5 minute validity window
+  const validity = new Date().getTime() + (5 * 60 * 1000);
+
+  // returns a unix timestamp
+  console.log("QR CODE VALIDITY: " + validity.toString());
+  const encrypted = CryptoJS.AES.encrypt(data_to_encrypt + '|' + validity.toString(), process.env.REACT_APP_cryptokey).toString();
   return encrypted;
 }

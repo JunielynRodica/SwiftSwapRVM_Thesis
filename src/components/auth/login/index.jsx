@@ -91,7 +91,13 @@ const Login = () => {
 
         setIsSigningIn(true);
         await doSignInWithCustomToken(data.text).then((res) => {
-            saveQRCreds(res.qr_encrypted);
+            if (res)
+                saveQRCreds(res.qr_encrypted);
+            else {
+                alert('QR Code has expired. Please login again.');
+                setIsSigningIn(false);
+                window.location.reload();
+            }
         });
     }
 
