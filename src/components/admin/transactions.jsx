@@ -3,7 +3,7 @@ import registered_users from '../../assets/registered_user.png';
 import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
 import { useNavigate } from 'react-router-dom';
-import {isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
+import {getUserEmailFromUid, isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
 import {getAllTransactions} from "../../firebase/firebase";
 import '../../style/transactions.css';
 const Transactions = () => {
@@ -22,13 +22,16 @@ const navigate = useNavigate();
         }
 
         async function populateData() {
-            console.log("Populating transaction data")
+            console.log("get all transactions")
             let data = await getAllTransactions();
-            console.log(data[0]);
-            setTransactions(data[0]);
+            console.log("After get all transactions")
+            console.log(data);
+            setTransactions(data);
         }
-        
+
+        console.log("populateData called")
         populateData();
+        console.log("populateData complete")
     }, []);
 
     return (
@@ -49,25 +52,25 @@ const navigate = useNavigate();
                                 <th>User</th>
                                 <th>Time</th>
                                 <th>Type</th>
-                                <th>Action</th>
                                 <th>Points</th>
                                 <th>Item Redeemed</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {transactions.length > 0 ? transactions.map((transaction) => {
-                                console.log("PARSING TRANSACTION")
-                                console.log(transaction)
-                                return (
-                                    <tr>
-                                        <td>{transaction.user}</td>
-                                        <td>{transaction.date}</td>
-                                        <td>{transaction.type}</td>
-                                        <td>{transaction.action}</td>
-                                        <td>{transaction.points}</td>
-                                        <td>{transaction.item}</td>
-                                    </tr>
-                                )
+                            {transactions.length > 0 ? transactions.map((outerArray) => {
+                                console.log("outerArray")
+                                console.log(outerArray)
+                                return outerArray.data.transactions.map((transaction) => {
+                                    return (
+                                        <tr>
+                                            <td>{outerArray.data.email}</td>
+                                            <td>{new Date(transaction.datetime._seconds*1000 + transaction.datetime._nanoseconds/100000).toLocaleString()}</td>
+                                            <td>{transaction.type}</td>
+                                            <td>{transaction.points}</td>
+                                            <td>{transaction.item}</td>
+                                        </tr>
+                                    )
+                                });
                             }) : <tr>
                                 <td colSpan="6">No transaction history available</td>
                             </tr>}

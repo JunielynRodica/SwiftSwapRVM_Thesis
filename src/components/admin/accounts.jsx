@@ -58,8 +58,8 @@ const navigate = useNavigate();
                             <tr>
                                 <td>{account.firebasedata.studentNumber}</td>
                                 <td>{account.firebasedata.points}</td>
-                                <td>{account.email.data}</td>
-                                <td>{account.uid}</td>
+                                <td>{account.email}</td>
+                                <td>{account.uid.substring(4, 8) + "..."}</td>
                             </tr>
                         )
                  }) : <tr><td colSpan="4">Data is loading, please wait...</td></tr> }

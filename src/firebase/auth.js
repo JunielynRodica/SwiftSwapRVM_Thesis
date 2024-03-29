@@ -114,19 +114,24 @@ export const getAllUsers = async () => {
   console.log("GETALLUSERS CALLED")
   const getUserUids = httpsCallable(fbfunctions, "getAllUsers");
   const getFirebaseUsers = httpsCallable(fbfunctions, "getFirebaseUser");
-  const getUserEmail = httpsCallable(fbfunctions, "getUserEmail");
 
   const authUids = await getUserUids();
   const users = []
 
   for (let i = 0; i < authUids.data.length; i++) {
     const firebaseUser = await getFirebaseUsers({ uid: authUids.data[i] });
-    const email = await getUserEmail({ uid: authUids.data[i]});
-    users.push(JSON.stringify({ email: email, uid: authUids.data[i], firebasedata: firebaseUser.data }));
+    users.push(JSON.stringify({ email: await getUserEmailFromUid(authUids.data[i]), uid: authUids.data[i], firebasedata: firebaseUser.data }));
   }
 
   console.log(users)
   return users;
+};
+
+export const getUserEmailFromUid = async (uid) => {
+  const getUserEmail = httpsCallable(fbfunctions, "getUserEmail");
+  console.log(uid)
+  const email = await getUserEmail({ uid: uid });
+  return email.data;
 }
 
 export const doPasswordReset = (email) => {

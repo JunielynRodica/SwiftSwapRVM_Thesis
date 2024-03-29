@@ -1,8 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {initializeApp} from "firebase/app";
+import {getAuth} from "firebase/auth";
 import {getFunctions, httpsCallable} from "firebase/functions";
 import {deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc} from "firebase/firestore";
-import {isUserLoggedIn} from "./auth";
+import {getUserEmailFromUid, isUserLoggedIn} from "./auth";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_apiKey || "",
@@ -47,10 +47,28 @@ export const getCurrentUserPoints = async () => {
 export const getAllTransactions = async () => {
     const getTransactions = httpsCallable(fbfunctions, "getAllTransactions");
     console.log("Getting all transactions");
-    let data = await getTransactions();
-    console.log(data.data);
 
-    return data.data;
+    return await getTransactions().then(async (data) => {
+        console.log("After getTransactions")
+        console.log(data.data);
+
+        for (let i = 0; i < data.data.length; i++) {
+            console.log("Getting data n " + i);
+            console.log(data.data[i])
+            console.log("Getting email for " + data.data[i].data.uid);
+
+            if (data.data[i].data.uid != null) {
+                await getUserEmailFromUid(data.data[i].data.uid).then((email) => {
+                    console.log("Email fetched for " + data.data[i].data.uid + " is " + email);
+                    data.data[i].data.email = email;
+                });
+            } else
+                data.data[i].data.email = "Could not fetch email";
+        }
+
+        console.log("ALL TRANSACTIONS DONE FETCHING")
+        return data.data;
+    });
 }
 
 
