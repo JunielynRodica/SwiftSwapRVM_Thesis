@@ -14,9 +14,15 @@ import TransactionHistory from "./components/pages/TransactionHistory";
 import './App.css';
 import { FaDashcube } from "react-icons/fa";
 import {connectAuthEmulator, getAuth} from "firebase/auth";
-import {connectFirestoreEmulator, getFirestore} from "firebase/firestore";
+import {
+    connectFirestoreEmulator, doc,
+    getDoc,
+    getFirestore,
+    initializeFirestore,
+    persistentLocalCache
+} from "firebase/firestore";
 import {connectFunctionsEmulator, getFunctions} from "firebase/functions";
-import {app} from "./firebase/firebase";
+import {app, SingleTransaction} from "./firebase/firebase";
 import Admin from "./components/admin/admin";
 import Accounts from "./components/admin/accounts";
 import Transactions from "./components/admin/transactions";
@@ -33,6 +39,16 @@ function App() {
             connectFirestoreEmulator(getFirestore(app), "localhost", 8080);
             connectFunctionsEmulator(getFunctions(app), "localhost", 5001);
             doCreateUserWithEmailAndPassword("admin@gmail.com", "password", 1234);
+            initOnce = true;
+        }
+    } else {
+        if (!initOnce) {
+            initializeFirestore(app, {localCache: persistentLocalCache()});
+
+            let fs = getFirestore(app);
+            let _doc = getDoc(doc(fs, "users/")).then(() => {
+                console.log("FIRESTORE CACHE SET")
+            });
             initOnce = true;
         }
     }
