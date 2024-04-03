@@ -16,7 +16,7 @@ import QrReader from 'react-qr-scanner'
 import {useOfflineStore} from "../../../store/useOfflineStore";
 
 const Login = () => {
-    const { userLoggedIn, setOfflineUser } = useAuth();
+    const { userLoggedIn } = useAuth();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -27,7 +27,7 @@ const Login = () => {
 
     const [queryParameters] = useSearchParams()
     const { saveQRCreds } = useQRStore();
-    const { loginOfflineUser } = useOfflineStore();
+    const { loginOfflineUser, offlineIsLoggedIn } = useOfflineStore();
 
     const checkParams = async (qrCreds) => {
         if (qrCreds) {
@@ -122,7 +122,7 @@ const Login = () => {
 
     return (
         <div>
-            {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
+            {(userLoggedIn || offlineIsLoggedIn) && <Navigate to={'/dashboard'} replace={true} />}
 
             <main className="login">
                 <div className="container_login">

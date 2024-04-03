@@ -36,8 +36,10 @@ const Dashboard = () => {
   useEffect(() => {
     console.log("Called useEffect")
     if (!isUserLoggedIn())
-      if (offlineIsLoggedIn)
+      if (!offlineIsLoggedIn) {
+        console.log("Nav out...")
         nav('/login');
+      }
 
     const fetchData = async () => {
       setPoints(await getCurrentUserPoints());
@@ -60,8 +62,10 @@ const Dashboard = () => {
   console.log("IS USER LOGGED IN? " + isUserLoggedIn())
 
     if (!isUserLoggedIn())
-      if (!offlineIsLoggedIn)
+      if (!offlineIsLoggedIn) {
+        console.log("WENT TO LOGIN PATH")
         return <Login/>
+    }
 
   return (
     <div className="container_dashboard">
