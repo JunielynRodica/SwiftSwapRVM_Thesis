@@ -6,6 +6,7 @@ import {
 } from '../../firebase/firebase';
 import {useNavigate} from "react-router-dom";
 import {isUserLoggedIn} from "../../firebase/auth";
+import {isUserOffline} from "../../contexts/offlineLoginHandler";
 
 const TransactionHistory = () => {
     // { id: 1, date: '2024-02-27', time: '10:00', points: 50, type: 'accumulated', item: null },
@@ -18,7 +19,8 @@ const TransactionHistory = () => {
         let internal_has_data = false;
 
         if (!isUserLoggedIn())
-            nav('/login')
+            if (!isUserOffline())
+                nav('/login')
 
         const fetchData = async () => {
             await getCurrentUserTransactions().then((data) => {

@@ -27,20 +27,25 @@ const navigate = useNavigate();
                 <h1>S W I F T S W A P | A D M I N </h1>
             </div>
  
-        <section id="admin_feature">
+        <section id="admin_feature" style={{ display: navigator.onLine ? 'block' : 'none' }}>
             <div className="access">
                 <NavLink to={"/admin/accounts"}>
                     <img src={registered_users} alt=""/>
                 </NavLink>
             </div>
-
             <div className="access">
                 <NavLink to={"/admin/transactions"}>
                     <img src={user_transaction} alt=""/>
                 </NavLink>
               </div>
+        </section>
 
-          </section>
+            <section id="admin_feature" style={{ display: navigator.onLine ? 'none' : 'block' }}>
+                <div className="offline">
+                    <h2>Offline Mode</h2>
+                    <p>The machine is currently offline. Please connect to the internet to access the admin panel.</p>
+                </div>
+            </section>
 
         </div>
 

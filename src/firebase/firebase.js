@@ -16,7 +16,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app)
+const auth = getAuth(app);
 const fbfunctions = getFunctions(app);
 
 export class SingleTransaction {
@@ -45,6 +45,11 @@ export const getCurrentUserPoints = async () => {
 }
 
 export const getAllTransactions = async () => {
+    // Check if we have a network connection to the internet, if not, return null
+    if (!navigator.onLine) {
+        return null;
+    }
+
     const getTransactions = httpsCallable(fbfunctions, "getAllTransactions");
     console.log("Getting all transactions");
 
@@ -70,7 +75,6 @@ export const getAllTransactions = async () => {
         return data.data;
     });
 }
-
 
 export const setCurrentUserPoints = async (points) => {
     if (!isUserLoggedIn())
@@ -123,6 +127,23 @@ export const getCurrentUserTransactions = async () => {
     }
 }
 
+export const getUserExistsInFirestore = async (uid) => {
+    let fs = getFirestore(app);
+    let user = auth.currentUser;
+
+    let _doc = await getDoc(doc(fs, "users/", uid));
+    return _doc.exists();
+}
+
+export const getUserDataFromFirestore = async (uid) => {
+    let fs = getFirestore(app);
+    let user = auth.currentUser;
+
+    let _doc = await getDoc(doc(fs, "users/", uid));
+    return _doc.data();
+
+}
+
 export const addDeductTransactionToCurrentUser = async (item, points) => {
     if (!isUserLoggedIn())
         return null;
@@ -173,6 +194,11 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
 }
 
 export const processPendingTransactions = async (uid) => {
+    // Check if we have a network connection to the internet, if not, return null
+    if (!navigator.onLine) {
+        return null;
+    }
+
     if (!isUserLoggedIn())
         return null;
 
@@ -199,4 +225,14 @@ export const processPendingTransactions = async (uid) => {
         // Delete the pending transaction
         await deleteDoc(pending.ref);
     }
+}
+
+export const _debugFirebaseDisableNetwork = () => {
+    const fs = getFirestore(app);
+    fs.disableNetwork();
+}
+
+export const _debugFirebaseEnableNetwork = () => {
+    const fs = getFirestore(app);
+    fs.enableNetwork();
 }

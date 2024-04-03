@@ -16,6 +16,7 @@ import {
 } from "../../firebase/firebase";
 import {isUserLoggedIn} from "../../firebase/auth";
 import {useNavigate} from "react-router-dom";
+import {isUserOffline} from "../../contexts/offlineLoginHandler";
 
 const Rewards = () => {
     const [points, setPoints] = useState(0);
@@ -23,7 +24,8 @@ const Rewards = () => {
 
     useEffect(() => {
         if (!isUserLoggedIn())
-            nav('/login')
+            if (!isUserOffline())
+                nav('/login')
 
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());

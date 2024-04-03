@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Navigate, Link, useSearchParams } from 'react-router-dom';
-import { doSignInWithEmailAndPassword, doSignInWithCustomToken } from '../../../firebase/auth';
+import {doSignInWithEmailAndPassword, doSignInWithCustomToken, doOfflineSignInWithQrCode} from '../../../firebase/auth';
 import CryptoJS from 'crypto-js';
 
 import { useAuth } from '../../../contexts/authContext';
@@ -13,9 +13,10 @@ import '../../../style/login.css';
 
 import { useQRStore } from '../../../store/useQRCreds';
 import QrReader from 'react-qr-scanner'
+import {loginOfflineUser} from "../../../contexts/offlineLoginHandler";
 
 const Login = () => {
-    const { userLoggedIn } = useAuth();
+    const { userLoggedIn, setOfflineUser } = useAuth();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -90,15 +91,34 @@ const Login = () => {
         if (data == null) return;
 
         setIsSigningIn(true);
-        await doSignInWithCustomToken(data.text).then((res) => {
-            if (res)
-                saveQRCreds(res.qr_encrypted);
-            else {
-                alert('QR Code has expired. Please login again.');
-                setIsSigningIn(false);
-                window.location.reload();
-            }
-        });
+
+        if (!navigator.onLine) {
+           await doOfflineSignInWithQrCode(data.text).then((res) => {
+                if (res) {
+                    saveQRCreds(res.qr_encrypted);
+                    loginOfflineUser(res.uid);
+
+                    // Manually redirect to the dashboard
+                    window.location.href = '/dashboard';
+                    window.location.reload();
+                }
+                else {
+                    alert('QR Code has expired. Please login again.');
+                    setIsSigningIn(false);
+                    window.location.reload();
+                }
+            });
+        } else {
+            await doSignInWithCustomToken(data.text).then((res) => {
+                if (res)
+                    saveQRCreds(res.qr_encrypted);
+                else {
+                    alert('QR Code has expired. Please login again.');
+                    setIsSigningIn(false);
+                    window.location.reload();
+                }
+            });
+        }
     }
 
     return (
@@ -130,26 +150,31 @@ const Login = () => {
                     </div>
                     <div className="right-content">
                         <h3 className="header_login">Welcome Back</h3>
-                        <form onSubmit={onSubmit}>
-                            <div className="inputs">
-                                <div className="input">
-                                    <img src={email_icon} alt="" />
-                                    <input type="email" placeholder="Email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <div style={{ display: navigator.onLine ? 'block' : 'none' }}>
+                            <form onSubmit={onSubmit}>
+                                <div className="inputs">
+                                    <div className="input">
+                                        <img src={email_icon} alt="" />
+                                        <input type="email" placeholder="Email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    </div>
+                                    <div className="input">
+                                        <img src={password_icon} alt="" />
+                                        <input type="password" placeholder="Password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    </div>
                                 </div>
-                                <div className="input">
-                                    <img src={password_icon} alt="" />
-                                    <input type="password" placeholder="Password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                                {/* {errorMessage && <span className="forgot-password">{errorMessage}</span>} */}
+                                <div className="submit-container">
+                                    <button type="submit" className="submit" disabled={isSigningIn}>
+                                        {isSigningIn ? 'Signing In...' : 'Sign In'}
+                                    </button>
                                 </div>
-                            </div>
-                            {/* {errorMessage && <span className="forgot-password">{errorMessage}</span>} */}
-                            <div className="submit-container">
-                                <button type="submit" className="submit" disabled={isSigningIn}>
-                                    {isSigningIn ? 'Signing In...' : 'Sign In'}
-                                </button>
-                            </div>
-                        </form>
-                        <p><Link to="/forgotpassword">Forgot Password</Link></p>
-                        <p>Don't have an account? <Link to="/register">Sign up</Link></p>
+                            </form>
+                            <p><Link to="/forgotpassword">Forgot Password</Link></p>
+                            <p>Don't have an account? <Link to="/register">Sign up</Link></p>
+                        </div>
+                        <div style={{ display: !navigator.onLine ? 'block' : 'none' }}>
+                            <p>Currently offline. Please scan QR code to login.</p>
+                        </div>
                     </div>
                 </div>
             </main>

@@ -21,6 +21,7 @@ import { getCurrentUserPoints } from "../../firebase/firebase";
 import Login from "../auth/login";
 import {useNavigate} from "react-router-dom";
 import {isUserLoggedIn} from "../../firebase/auth";
+import {getOfflineUserDisplayName, getOfflineUserEmail, isUserOffline} from "../../contexts/offlineLoginHandler";
 
 const Dashboard = () => {
   const [points, setPoints] = useState(0);
@@ -31,7 +32,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!isUserLoggedIn())
-      nav('/login');
+      if (!isUserOffline())
+        nav('/login');
 
     const fetchData = async () => {
       setPoints(await getCurrentUserPoints());
@@ -40,7 +42,7 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  if (currentUser == null) {
+  if (currentUser == null && !isUserOffline()) {
     return <Login />
   }
 
@@ -51,17 +53,19 @@ const Dashboard = () => {
         <h1>S W I F T S W A P</h1>
       </div>
       <body>
-        <div className='user'>
-          <div>Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, it's nice to see you again!</div>
-          <div>SwiftSwap Points: {points}</div>
-          {/* <p className='user-welcome'>WELCOME BACK: USER 384782972</p>
+      <div className='user'>
+        <div style={{display: isUserOffline() ? 'block' : 'none'}}>Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, it's nice to see you again!</div>
+        <div style={{display: !isUserOffline() ? 'block' : 'none'}}>Hello {getOfflineUserDisplayName() ? getOfflineUserDisplayName() : getOfflineUserEmail()}, it's nice to see you again!</div>
+
+        <div>SwiftSwap Points: {points}</div>
+        {/* <p className='user-welcome'>WELCOME BACK: USER 384782972</p>
             <p className='user-point'>SwiftSwap Points: 50</p> */}
-        </div>
-        <br></br>
-        
-        <p className="qr-intro">Use this QR Code to Log in on the SwiftSwap Machine.</p>
-        <br></br>
-        <div style={{ height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
+      </div>
+      <br></br>
+
+      <p className="qr-intro">Use this QR Code to Log in on the SwiftSwap Machine.</p>
+      <br></br>
+      <div style={{height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
           {
             QRCreds != null ? <QRCode
               size={256}

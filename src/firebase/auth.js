@@ -1,7 +1,7 @@
 import {
   addIncrementTransactionToCurrentUser,
   auth,
-  fbfunctions,
+  fbfunctions, getUserExistsInFirestore,
   processPendingTransactions,
   SingleTransaction
 } from "./firebase";
@@ -28,6 +28,7 @@ import {
 import CryptoJS from 'crypto-js';
 import {getFunctions, httpsCallable} from "firebase/functions";
 import {startSessionTimeout, stopSessionTimeout} from "../contexts/sessionTimeoutHandler";
+import {isUserOffline, logoutOfflineUser} from "../contexts/offlineLoginHandler";
 
 // Default: 15 minutes
                               // min * sec * millisec
@@ -90,9 +91,39 @@ export const doSignInWithCustomToken = async (access_token) => {
   return { qr_encrypted: getQRCodeData() }
 };
 
+export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
+    const decrypt = await CryptoJS.AES.decrypt(qr_encrypted, process.env.REACT_APP_cryptokey).toString(CryptoJS.enc.Utf8);
+    const uid = decrypt.split('|')[0];
+    const validity = decrypt.split('|')[1];
+
+    console.log("OFFLINE QR LOGIN ATTEMPT")
+
+    // Disable validity check for offline login
+
+    /*if (validity < new Date().getTime()) {
+        console.log("OFFLINE QR CODE EXPIRED")
+        return null;
+    }*/
+
+
+    let doesUserExist = await getUserExistsInFirestore(uid);
+    if (!doesUserExist) {
+      console.log("USER DOES NOT EXIST IN LOCAL COPY OF FIREBASE DATABASE")
+      return null;
+    } else {
+      console.log("OFFLINE QR CODE LOGIN PASSED")
+      startSessionTimeout(sessionTimeoutMS);
+      return { qr_encrypted: getQRCodeData(), uid: uid }
+    }
+};
+
 export const doSignOut = () => {
   stopSessionTimeout();
-  return auth.signOut();
+
+  if (isUserOffline())
+    logoutOfflineUser();
+  else
+    return auth.signOut();
 };
 
 export const isUserLoggedIn = () => {
@@ -111,6 +142,10 @@ export const isUserAdmin = async () => {
 }
 
 export const getAllUsers = async () => {
+  // Don't fetch if we aren't online
+  if (!navigator.onLine)
+    return null;
+
   console.log("GETALLUSERS CALLED")
   const getUserUids = httpsCallable(fbfunctions, "getAllUsers");
   const getFirebaseUsers = httpsCallable(fbfunctions, "getFirebaseUser");
@@ -155,8 +190,8 @@ export const getQRCodeData = () => {
   const user = auth.currentUser;
   const data_to_encrypt = user.uid;
 
-  // 5 minute validity window
-  const validity = new Date().getTime() + (5 * 60 * 1000);
+  // 2 day validity window
+  const validity = new Date().getTime() + (2 * 24 * 60 * 60 * 1000);
 
   // returns a unix timestamp
   console.log("QR CODE VALIDITY: " + validity.toString());

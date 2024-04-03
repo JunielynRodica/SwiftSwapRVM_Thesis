@@ -16,10 +16,12 @@ import { FaDashcube } from "react-icons/fa";
 import {connectAuthEmulator, getAuth} from "firebase/auth";
 import {
     connectFirestoreEmulator, doc,
-    getDoc,
+    getDocs,
     getFirestore,
     initializeFirestore,
-    persistentLocalCache
+    persistentLocalCache,
+    getPersistentCacheIndexManager,
+    collection
 } from "firebase/firestore";
 import {connectFunctionsEmulator, getFunctions} from "firebase/functions";
 import {app, SingleTransaction} from "./firebase/firebase";
@@ -44,10 +46,14 @@ function App() {
     } else {
         if (!initOnce) {
             initializeFirestore(app, {localCache: persistentLocalCache()});
-
             let fs = getFirestore(app);
-            let _doc = getDoc(doc(fs, "users/")).then(() => {
-                console.log("FIRESTORE CACHE SET")
+
+            // Get all documents in the root collection in Firebase to store them in the cache
+            getDocs(collection(fs, "users")).then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(querySnapshot.metadata.fromCache ? "FROM CACHE" : "NOT FROM CACHE")
+                    console.log(doc.id, " => ", doc.data());
+                });
             });
             initOnce = true;
         }
