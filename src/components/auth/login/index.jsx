@@ -13,7 +13,7 @@ import '../../../style/login.css';
 
 import { useQRStore } from '../../../store/useQRCreds';
 import QrReader from 'react-qr-scanner'
-import {loginOfflineUser} from "../../../contexts/offlineLoginHandler";
+import {useOfflineStore} from "../../../store/useOfflineStore";
 
 const Login = () => {
     const { userLoggedIn, setOfflineUser } = useAuth();
@@ -27,6 +27,7 @@ const Login = () => {
 
     const [queryParameters] = useSearchParams()
     const { saveQRCreds } = useQRStore();
+    const { loginOfflineUser } = useOfflineStore();
 
     const checkParams = async (qrCreds) => {
         if (qrCreds) {
@@ -93,14 +94,12 @@ const Login = () => {
         setIsSigningIn(true);
 
         if (!navigator.onLine) {
+            console.log("Doing sign in with QR")
            await doOfflineSignInWithQrCode(data.text).then((res) => {
                 if (res) {
+                    console.log("Data found for QR")
                     saveQRCreds(res.qr_encrypted);
                     loginOfflineUser(res.uid);
-
-                    // Manually redirect to the dashboard
-                    window.location.href = '/dashboard';
-                    window.location.reload();
                 }
                 else {
                     alert('QR Code has expired. Please login again.');

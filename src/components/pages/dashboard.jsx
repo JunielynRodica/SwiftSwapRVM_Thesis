@@ -21,30 +21,47 @@ import { getCurrentUserPoints } from "../../firebase/firebase";
 import Login from "../auth/login";
 import {useNavigate} from "react-router-dom";
 import {isUserLoggedIn} from "../../firebase/auth";
-import {getOfflineUserDisplayName, getOfflineUserEmail, isUserOffline} from "../../contexts/offlineLoginHandler";
+import {useOfflineStore} from "../../store/useOfflineStore";
 
 const Dashboard = () => {
   const [points, setPoints] = useState(0);
+  const [displayName, setDisplayName] = useState("");
+  const [displayEmail, setDisplayEmail] = useState("");
   const nav = useNavigate();
 
   const { currentUser } = useAuth()
   const { QRCreds } = useQRStore();
+  const { offlineIsLoggedIn, offlineEmail, offlineDisplayName } = useOfflineStore();
 
   useEffect(() => {
+    console.log("Called useEffect")
     if (!isUserLoggedIn())
-      if (!isUserOffline())
+      if (offlineIsLoggedIn)
         nav('/login');
 
     const fetchData = async () => {
       setPoints(await getCurrentUserPoints());
+
+      if (offlineIsLoggedIn) {
+        setDisplayName(offlineDisplayName);
+        setDisplayEmail(offlineEmail);
+      } else {
+        if (currentUser != null) {
+          setDisplayName(currentUser.displayName);
+          setDisplayEmail(currentUser.email);
+        }
+      }
     }
 
     fetchData();
   }, []);
 
-  if (currentUser == null && !isUserOffline()) {
-    return <Login />
-  }
+  console.log("IS USER OFFLINE? " + offlineIsLoggedIn)
+  console.log("IS USER LOGGED IN? " + isUserLoggedIn())
+
+    if (!isUserLoggedIn())
+      if (!offlineIsLoggedIn)
+        return <Login/>
 
   return (
     <div className="container_dashboard">
@@ -54,9 +71,7 @@ const Dashboard = () => {
       </div>
       <body>
       <div className='user'>
-        <div style={{display: isUserOffline() ? 'block' : 'none'}}>Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, it's nice to see you again!</div>
-        <div style={{display: !isUserOffline() ? 'block' : 'none'}}>Hello {getOfflineUserDisplayName() ? getOfflineUserDisplayName() : getOfflineUserEmail()}, it's nice to see you again!</div>
-
+        <div>Hello {displayName ? displayName : displayEmail}, it's nice to see you again!</div>
         <div>SwiftSwap Points: {points}</div>
         {/* <p className='user-welcome'>WELCOME BACK: USER 384782972</p>
             <p className='user-point'>SwiftSwap Points: 50</p> */}

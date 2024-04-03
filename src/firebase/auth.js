@@ -28,7 +28,7 @@ import {
 import CryptoJS from 'crypto-js';
 import {getFunctions, httpsCallable} from "firebase/functions";
 import {startSessionTimeout, stopSessionTimeout} from "../contexts/sessionTimeoutHandler";
-import {isUserOffline, logoutOfflineUser} from "../contexts/offlineLoginHandler";
+import {useOfflineStore} from "../store/useOfflineStore";
 
 // Default: 15 minutes
                               // min * sec * millisec
@@ -94,17 +94,16 @@ export const doSignInWithCustomToken = async (access_token) => {
 export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
     const decrypt = await CryptoJS.AES.decrypt(qr_encrypted, process.env.REACT_APP_cryptokey).toString(CryptoJS.enc.Utf8);
     const uid = decrypt.split('|')[0];
-    const validity = decrypt.split('|')[1];
 
     console.log("OFFLINE QR LOGIN ATTEMPT")
 
     // Disable validity check for offline login
 
+    // const validity = decrypt.split('|')[1];
     /*if (validity < new Date().getTime()) {
         console.log("OFFLINE QR CODE EXPIRED")
         return null;
     }*/
-
 
     let doesUserExist = await getUserExistsInFirestore(uid);
     if (!doesUserExist) {
@@ -119,11 +118,7 @@ export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
 
 export const doSignOut = () => {
   stopSessionTimeout();
-
-  if (isUserOffline())
-    logoutOfflineUser();
-  else
-    return auth.signOut();
+  return auth.signOut();
 };
 
 export const isUserLoggedIn = () => {

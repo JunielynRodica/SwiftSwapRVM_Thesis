@@ -16,15 +16,16 @@ import {
 } from "../../firebase/firebase";
 import {isUserLoggedIn} from "../../firebase/auth";
 import {useNavigate} from "react-router-dom";
-import {isUserOffline} from "../../contexts/offlineLoginHandler";
+import {useOfflineStore} from "../../store/useOfflineStore";
 
 const Rewards = () => {
     const [points, setPoints] = useState(0);
     const nav = useNavigate();
+    const { offlineIsLoggedIn, offlineEmail, offlineDisplayName } = useOfflineStore();
 
     useEffect(() => {
         if (!isUserLoggedIn())
-            if (!isUserOffline())
+            if (!offlineIsLoggedIn)
                 nav('/login')
 
         const fetchData = async () => {
