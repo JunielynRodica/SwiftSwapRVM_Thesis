@@ -21,7 +21,9 @@ import {
     initializeFirestore,
     persistentLocalCache,
     getPersistentCacheIndexManager,
-    collection
+    collection,
+    enableNetwork,
+    disableNetwork
 } from "firebase/firestore";
 import {connectFunctionsEmulator, getFunctions} from "firebase/functions";
 import {app, SingleTransaction} from "./firebase/firebase";
@@ -47,6 +49,26 @@ function App() {
         if (!initOnce) {
             initializeFirestore(app, {localCache: persistentLocalCache()});
             let fs = getFirestore(app);
+
+            if (navigator.onLine === false) {
+                disableNetwork(fs).then(() => {
+                    console.log("Firebase: Network disabled");
+                });
+            }
+
+            window.addEventListener("online", () => {
+                console.log("Browser is now online");
+                enableNetwork(fs).then(() => {
+                    console.log("Firebase: Network enabled");
+                });
+            }, false);
+
+            window.addEventListener("offline", () => {
+                console.log("Browser is now offline");
+                disableNetwork(fs).then(() => {
+                    console.log("Firebase: Network disabled");
+                });
+            });
 
             // Get all documents in the root collection in Firebase to store them in the cache
             getDocs(collection(fs, "users")).then((querySnapshot) => {
