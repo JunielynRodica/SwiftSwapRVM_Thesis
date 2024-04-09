@@ -15,6 +15,11 @@ export function setUserStoreSignedIn(value) {
 }
 
 export function getUserStoreUid() {
+    if (userUid === "" && isLoggedIn) {
+        // Something has gone wrong, reload the page
+        userStoreLogout();
+        window.location.reload();
+    }
     return userUid;
 }
 
