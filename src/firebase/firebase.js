@@ -191,7 +191,7 @@ export const processPendingTransactions = async (uid) => {
         return null;
 
     // Process pending transactions during login step
-    const pending = await getDoc(doc(getFirestore(), "raspberry_pi_esp_32", uid));
+    const pending = await getDoc(doc(getFirestore(), "raspberry_pi", uid));
     if (pending.exists()) {
         const data = pending.data();
         const fs = getFirestore();
