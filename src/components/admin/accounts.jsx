@@ -56,10 +56,10 @@ const navigate = useNavigate();
                      account = JSON.parse(account);
                         return (
                             <tr>
-                                <td>{account.firebasedata.studentNumber}</td>
-                                <td>{account.firebasedata.points}</td>
+                                <td>{account.studentNumber}</td>
+                                <td>{account.points}</td>
                                 <td>{account.email}</td>
-                                <td>{account.uid.substring(4, 8) + "..."}</td>
+                                <td>{account.uid.substring(0, 8) + "..."}</td>
                             </tr>
                         )
                  }) : <tr><td colSpan="4">Data is loading, please wait...</td></tr> }

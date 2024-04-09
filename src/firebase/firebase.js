@@ -1,8 +1,10 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
 import {getFunctions, httpsCallable} from "firebase/functions";
-import {deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDoc, getDocFromCache, getFirestore, setDoc, updateDoc} from "firebase/firestore";
 import {getUserEmailFromUid, isUserLoggedIn} from "./auth";
+import {getUserStoreUid} from "../contexts/userStore";
+import {getDocs} from "@firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_apiKey || "",
@@ -36,44 +38,30 @@ export const getCurrentUserPoints = async () => {
         return null;
 
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
-    let _doc = await getDoc(doc(fs, "users/", user.uid));
+    let _doc = await getDoc(doc(fs, "users/", getUserStoreUid()));
     if (_doc.exists()) {
         return _doc.data().points;
     }
 }
 
 export const getAllTransactions = async () => {
-    // Check if we have a network connection to the internet, if not, return null
-    if (!navigator.onLine) {
-        return null;
-    }
 
-    const getTransactions = httpsCallable(fbfunctions, "getAllTransactions");
-    console.log("Getting all transactions");
+    const snapshot = await getDocs(collection(getFirestore(), "users"));
+    let data = [];
 
-    return await getTransactions().then(async (data) => {
-        console.log("After getTransactions")
-        console.log(data.data);
+    snapshot.forEach((doc) => {
+        console.log("Fetching transaction history for " + doc.id + "...");
 
-        for (let i = 0; i < data.data.length; i++) {
-            console.log("Getting data n " + i);
-            console.log(data.data[i])
-            console.log("Getting email for " + data.data[i].data.uid);
-
-            if (data.data[i].data.uid != null) {
-                await getUserEmailFromUid(data.data[i].data.uid).then((email) => {
-                    console.log("Email fetched for " + data.data[i].data.uid + " is " + email);
-                    data.data[i].data.email = email;
-                });
-            } else
-                data.data[i].data.email = "Could not fetch email";
+        if (data.length > 100) {
+            console.log("Data limit reached (100), stopping...");
+            return;
         }
 
-        console.log("ALL TRANSACTIONS DONE FETCHING")
-        return data.data;
+        data.push({user: doc.data().studentNumber, email: doc.data().email, transactions: doc.data().transaction_history})
     });
+
+    return data;
 }
 
 export const setCurrentUserPoints = async (points) => {
@@ -81,9 +69,8 @@ export const setCurrentUserPoints = async (points) => {
         return null;
 
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
-    await setDoc(doc(fs, "users/", user.uid), {
+    await setDoc(doc(fs, "users/", getUserStoreUid()), {
         points: await getCurrentUserPoints() + points
     }, { merge: true });
 }
@@ -93,9 +80,8 @@ export const deductCurrentUserPoints = async (points) => {
         return null;
 
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
-    await setDoc(doc(fs, "users/", user.uid), {
+    await setDoc(doc(fs, "users/", getUserStoreUid()), {
         points: await getCurrentUserPoints() - points
     }, { merge: true });
 }
@@ -105,9 +91,8 @@ export const addCurrentUserPoints = async (points) => {
         return null;
 
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
-    await setDoc(doc(fs, "users/", user.uid), {
+    await setDoc(doc(fs, "users/", getUserStoreUid()), {
         points: await getCurrentUserPoints() + points
     }, { merge: true });
 }
@@ -117,9 +102,8 @@ export const getCurrentUserTransactions = async () => {
         return null;
 
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
-    let _doc = await getDoc(doc(fs, "users/", user.uid));
+    let _doc = await getDoc(doc(fs, "users/", getUserStoreUid()));
     if (_doc.exists()) {
         return _doc.data().transaction_history.map((data) => {
             return new SingleTransaction(data.id, new Date(data.datetime.toDate()), data.points, data.type, data.item);
@@ -129,10 +113,16 @@ export const getCurrentUserTransactions = async () => {
 
 export const getUserExistsInFirestore = async (uid) => {
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
-    let _doc = await getDoc(doc(fs, "users/", uid));
-    return _doc.exists();
+    console.log("TRYING TO GET UID " + uid)
+
+    try {
+        let _doc = await getDocFromCache(doc(fs, "users/", uid));
+        return _doc.exists();
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
 }
 
 export const getUserDataFromFirestore = async (uid) => {
@@ -141,7 +131,6 @@ export const getUserDataFromFirestore = async (uid) => {
 
     let _doc = await getDoc(doc(fs, "users/", uid));
     return _doc.data();
-
 }
 
 export const addDeductTransactionToCurrentUser = async (item, points) => {
@@ -149,13 +138,12 @@ export const addDeductTransactionToCurrentUser = async (item, points) => {
         return null;
 
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
     let transaction = new SingleTransaction(await getCurrentUserTransactions().length, new Date(), points, "redeem", item);
     let currentTransactions = await getCurrentUserTransactions();
     currentTransactions.push(transaction);
 
-    await setDoc(doc(fs, "users/", user.uid), {
+    await setDoc(doc(fs, "users/", getUserStoreUid()), {
         points: await getCurrentUserPoints() - points,
         transaction_history: currentTransactions.map((transaction) => {
             return {
@@ -168,18 +156,18 @@ export const addDeductTransactionToCurrentUser = async (item, points) => {
         })
     }, { merge: true });
 }
+
 export const addIncrementTransactionToCurrentUser = async (points) => {
     if (!isUserLoggedIn())
         return null;
 
     let fs = getFirestore(app);
-    let user = auth.currentUser;
 
     let transaction = new SingleTransaction(await getCurrentUserTransactions().length, new Date(), points, "accumulated");
     let currentTransactions = await getCurrentUserTransactions();
     currentTransactions.push(transaction)
 
-    await setDoc(doc(fs, "users/", user.uid), {
+    await setDoc(doc(fs, "users/", getUserStoreUid()), {
         points: await getCurrentUserPoints() + points,
         transaction_history: currentTransactions.map((transaction) => {
             return {
@@ -194,7 +182,7 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
 }
 
 export const processPendingTransactions = async (uid) => {
-    // Check if we have a network connection to the internet, if not, return null
+    // Don't process any pending transactions when we're offline
     if (!navigator.onLine) {
         return null;
     }
@@ -225,14 +213,4 @@ export const processPendingTransactions = async (uid) => {
         // Delete the pending transaction
         await deleteDoc(pending.ref);
     }
-}
-
-export const _debugFirebaseDisableNetwork = () => {
-    const fs = getFirestore(app);
-    fs.disableNetwork();
-}
-
-export const _debugFirebaseEnableNetwork = () => {
-    const fs = getFirestore(app);
-    fs.enableNetwork();
 }

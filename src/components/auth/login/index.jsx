@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { Navigate, Link, useSearchParams } from 'react-router-dom';
-import {doSignInWithEmailAndPassword, doSignInWithCustomToken, doOfflineSignInWithQrCode} from '../../../firebase/auth';
+import {
+    doSignInWithEmailAndPassword,
+    doSignInWithCustomToken,
+    doOfflineSignInWithQrCode,
+} from '../../../firebase/auth';
 import CryptoJS from 'crypto-js';
 
 import { useAuth } from '../../../contexts/authContext';
@@ -13,7 +17,7 @@ import '../../../style/login.css';
 
 import { useQRStore } from '../../../store/useQRCreds';
 import QrReader from 'react-qr-scanner'
-import {useOfflineStore} from "../../../store/useOfflineStore";
+import {getUserStoreSignedIn, setUserStoreSignedIn} from "../../../contexts/userStore";
 
 const Login = () => {
     const { userLoggedIn } = useAuth();
@@ -27,7 +31,6 @@ const Login = () => {
 
     const [queryParameters] = useSearchParams()
     const { saveQRCreds } = useQRStore();
-    const { loginOfflineUser, offlineIsLoggedIn } = useOfflineStore();
 
     const checkParams = async (qrCreds) => {
         if (qrCreds) {
@@ -94,15 +97,13 @@ const Login = () => {
         setIsSigningIn(true);
 
         if (!navigator.onLine) {
-            console.log("Doing sign in with QR")
+            console.log("Doing offline sign in with QR")
            await doOfflineSignInWithQrCode(data.text).then((res) => {
                 if (res) {
-                    console.log("Data found for QR")
                     saveQRCreds(res.qr_encrypted);
-                    loginOfflineUser(res.uid);
                 }
                 else {
-                    alert('QR Code has expired. Please login again.');
+                    alert('Login Failed. Please try another QR Code.');
                     setIsSigningIn(false);
                     window.location.reload();
                 }
@@ -122,7 +123,7 @@ const Login = () => {
 
     return (
         <div>
-            {(userLoggedIn || offlineIsLoggedIn) && <Navigate to={'/dashboard'} replace={true} />}
+            {(getUserStoreSignedIn()) && <Navigate to={'/dashboard'} replace={true} />}
 
             <main className="login">
                 <div className="container_login">

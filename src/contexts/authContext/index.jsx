@@ -8,7 +8,7 @@ import Rewards from "../../components/pages/rewards";
 import About from "../../components/pages/about";
 import Dashboard from "../../components/pages/dashboard";
 import TransactionHistory from "../../components/pages/TransactionHistory";
-import {useOfflineStore} from "../../store/useOfflineStore";
+import {getUserStoreSignedIn, setUserStoreSignedIn} from "../userStore";
 
 const AuthContext = React.createContext();
 
@@ -18,11 +18,9 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isEmailUser, setIsEmailUser] = useState(false);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { offlineIsLoggedIn } = useOfflineStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
@@ -39,18 +37,14 @@ export function AuthProvider({ children }) {
         (provider) => provider.providerId === "password"
       );
       setIsEmailUser(isEmail);
-
-      setUserLoggedIn(true);
     } else {
       setCurrentUser(null);
-      setUserLoggedIn(false);
     }
 
     setLoading(false);
   }
 
   const value = {
-    userLoggedIn,
     isEmailUser,
     isGoogleUser,
     currentUser,
@@ -59,7 +53,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && (userLoggedIn || offlineIsLoggedIn) ? (
+      {!loading && (getUserStoreSignedIn()) ? (
         <Sidebar>
           {children}
         </Sidebar>

@@ -49,7 +49,8 @@ const navigate = useNavigate();
                         <table className="transactions-table">
                             <thead>
                             <tr>
-                                <th>User</th>
+                                <th>Student ID</th>
+                                <th>Email</th>
                                 <th>Time</th>
                                 <th>Type</th>
                                 <th>Points</th>
@@ -57,14 +58,13 @@ const navigate = useNavigate();
                             </tr>
                             </thead>
                             <tbody>
-                            {transactions.length > 0 ? transactions.map((outerArray) => {
-                                console.log("outerArray")
-                                console.log(outerArray)
-                                return outerArray.data.transactions.map((transaction) => {
+                            {transactions.length > 0 ? transactions.map((user) => {
+                                return user.transactions.map((transaction) => {
                                     return (
                                         <tr>
-                                            <td>{outerArray.data.email}</td>
-                                            <td>{new Date(transaction.datetime._seconds*1000 + transaction.datetime._nanoseconds/100000).toLocaleString()}</td>
+                                            <td>{user.user}</td>
+                                            <td>{user.email}</td>
+                                            <td>{new Date(transaction.datetime.seconds * 1000 + transaction.datetime.nanoseconds / 100000).toLocaleString()}</td>
                                             <td>{transaction.type}</td>
                                             <td>{transaction.points}</td>
                                             <td>{transaction.item}</td>

@@ -15,55 +15,30 @@ import step4 from '../../assets/step4.png';
 import step5 from '../../assets/step5.png';
 import step6 from '../../assets/step6.png';
 import rvmpic from '../../assets/rvmpic.png';
-import { useAuth } from '../../contexts/authContext';
 import { useQRStore } from "../../store/useQRCreds";
 import { getCurrentUserPoints } from "../../firebase/firebase";
 import Login from "../auth/login";
-import {useNavigate} from "react-router-dom";
 import {isUserLoggedIn} from "../../firebase/auth";
-import {useOfflineStore} from "../../store/useOfflineStore";
+import {getUserStoreDisplayName, getUserStoreEmail} from "../../contexts/userStore";
 
 const Dashboard = () => {
   const [points, setPoints] = useState(0);
   const [displayName, setDisplayName] = useState("");
   const [displayEmail, setDisplayEmail] = useState("");
-  const nav = useNavigate();
 
-  const { currentUser } = useAuth()
   const { QRCreds } = useQRStore();
-  const { offlineIsLoggedIn, offlineEmail, offlineDisplayName } = useOfflineStore();
 
   useEffect(() => {
-    console.log("Called useEffect")
-    if (!isUserLoggedIn())
-      if (!offlineIsLoggedIn) {
-        console.log("Nav out...")
-        nav('/login');
-      }
-
     const fetchData = async () => {
       setPoints(await getCurrentUserPoints());
-
-      if (offlineIsLoggedIn) {
-        setDisplayName(offlineDisplayName);
-        setDisplayEmail(offlineEmail);
-      } else {
-        if (currentUser != null) {
-          setDisplayName(currentUser.displayName);
-          setDisplayEmail(currentUser.email);
-        }
-      }
+      setDisplayName(getUserStoreDisplayName());
+      setDisplayEmail(getUserStoreEmail());
     }
 
     fetchData();
   }, []);
 
-  console.log("IS USER OFFLINE? " + offlineIsLoggedIn)
-  console.log("IS USER LOGGED IN? " + isUserLoggedIn())
-
-    if (!isUserLoggedIn())
-      if (!offlineIsLoggedIn) {
-        console.log("WENT TO LOGIN PATH")
+    if (!isUserLoggedIn()) {
         return <Login/>
     }
 

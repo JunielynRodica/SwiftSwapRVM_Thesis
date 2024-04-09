@@ -9,12 +9,9 @@ import {
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import rvmpic from '../assets/rvmpic.png';
 import { useAuth } from "../contexts/authContext";
-
-
-
 import {doSignOut, isUserAdmin} from '../firebase/auth'
 import {FaGear} from "react-icons/fa6";
-import {useOfflineStore} from "../store/useOfflineStore";
+import {getUserStoreSignedIn, userStoreLogout} from "../contexts/userStore";
 
 const Sidebar = ({ children }) => {
 
@@ -23,8 +20,6 @@ const Sidebar = ({ children }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [adminUser, setAdminUser] = useState(false);
-
-    const { offlineIsLoggedIn, logoutOfflineUser } = useOfflineStore();
 
     useEffect(() => {
         async function getIsUserAdmin() {
@@ -93,17 +88,15 @@ const Sidebar = ({ children }) => {
                 ))}
                 {/* <div>Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, you are now logged in.</div> */}
                 {
-                    (currentUser || offlineIsLoggedIn)
+                    (getUserStoreSignedIn())
                         ?
                         <>
                         <div  className="logout_button" style={{ display: isOpen ? "block" : "none", justifyContent: 'center', marginTop: '200px', marginLeft: '50px', }}>
                         <button 
                             onClick={() => { 
                                 doSignOut().then(() => {
-                                    if (offlineIsLoggedIn)
-                                        logoutOfflineUser();
-
-                                    navigate('/login') 
+                                    userStoreLogout()
+                                    navigate('/login')
                                 }) 
                             }}
                             style={{

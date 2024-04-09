@@ -23,12 +23,18 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  collection
 } from "firebase/firestore";
 
 import CryptoJS from 'crypto-js';
 import {getFunctions, httpsCallable} from "firebase/functions";
 import {startSessionTimeout, stopSessionTimeout} from "../contexts/sessionTimeoutHandler";
-import {useOfflineStore} from "../store/useOfflineStore";
+import {
+  getUserStoreSignedIn,
+  getUserStoreUid,
+  userStoreLogin, userStoreLogout,
+} from "../contexts/userStore";
+import {getDocs} from "@firebase/firestore";
 
 // Default: 15 minutes
                               // min * sec * millisec
@@ -60,6 +66,7 @@ export const doCreateUserWithEmailAndPassword = async (email, password, studentN
   });
 
   startSessionTimeout(sessionTimeoutMS);
+  userStoreLogin(cred.user.uid, email, "");
 };
 
 export const doSignInWithEmailAndPassword = async (email, password) => {
@@ -67,6 +74,7 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
 
   await processPendingTransactions(cred.user.uid);
   startSessionTimeout(sessionTimeoutMS);
+  userStoreLogin(cred.user.uid, email, "");
   return { qr_encrypted: getQRCodeData() };
 };
 
@@ -88,6 +96,7 @@ export const doSignInWithCustomToken = async (access_token) => {
   const cred = await signInWithCustomToken(auth, server_token.data);
   await processPendingTransactions(cred.user.uid);
   startSessionTimeout(sessionTimeoutMS);
+  userStoreLogin(cred.user.uid, cred.user.email, "");
   return { qr_encrypted: getQRCodeData() }
 };
 
@@ -111,57 +120,48 @@ export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
       return null;
     } else {
       console.log("OFFLINE QR CODE LOGIN PASSED")
+      let user = await getDoc(doc(getFirestore(), "users/", uid)).then((doc) => { return doc.data() });
+      userStoreLogin(user.uid, user.email, "");
+
       startSessionTimeout(sessionTimeoutMS);
-      return { qr_encrypted: getQRCodeData(), uid: uid }
+      return { qr_encrypted: getQRCodeData() }
     }
 };
 
 export const doSignOut = () => {
   stopSessionTimeout();
+  userStoreLogout();
   return auth.signOut();
 };
 
 export const isUserLoggedIn = () => {
-  let user = auth.currentUser;
-  return user != null;
+  return getUserStoreSignedIn();
 }
 
 export const isUserAdmin = async () => {
-  let user = auth.currentUser;
-  console.log("ISUSERADMIN CALLED")
-  if (user == null) return false;
-
-  let isadmin = await getDoc(doc(getFirestore(), "users/", user.uid)).then((doc) => { return doc.data().isadmin });
-  console.log(isadmin);
+  let isadmin = await getDoc(doc(getFirestore(), "users/", getUserStoreUid())).then((doc) => { return doc.data().isadmin });
+  console.log("Is current user admin? " + isadmin);
   return isadmin;
 }
 
 export const getAllUsers = async () => {
-  // Don't fetch if we aren't online
-  if (!navigator.onLine)
-    return null;
-
   console.log("GETALLUSERS CALLED")
-  const getUserUids = httpsCallable(fbfunctions, "getAllUsers");
-  const getFirebaseUsers = httpsCallable(fbfunctions, "getFirebaseUser");
 
-  const authUids = await getUserUids();
   const users = []
+  const snapshot = await getDocs(collection(getFirestore(), "users"));
 
-  for (let i = 0; i < authUids.data.length; i++) {
-    const firebaseUser = await getFirebaseUsers({ uid: authUids.data[i] });
-    users.push(JSON.stringify({ email: await getUserEmailFromUid(authUids.data[i]), uid: authUids.data[i], firebasedata: firebaseUser.data }));
-  }
+  snapshot.forEach((doc) => {
+    users.push(JSON.stringify(doc.data()));
+  });
 
   console.log(users)
-  return users;
+  return (users)
 };
 
 export const getUserEmailFromUid = async (uid) => {
-  const getUserEmail = httpsCallable(fbfunctions, "getUserEmail");
-  console.log(uid)
-  const email = await getUserEmail({ uid: uid });
-  return email.data;
+  await doc(getFirestore(), "users/", uid).get().then((doc) => {
+    return doc.data().email;
+  });
 }
 
 export const doPasswordReset = (email) => {
@@ -182,8 +182,7 @@ export const getQRCodeData = () => {
   if (!isUserLoggedIn())
     return null;
 
-  const user = auth.currentUser;
-  const data_to_encrypt = user.uid;
+  const data_to_encrypt = getUserStoreUid();
 
   // 2 day validity window
   const validity = new Date().getTime() + (2 * 24 * 60 * 60 * 1000);
