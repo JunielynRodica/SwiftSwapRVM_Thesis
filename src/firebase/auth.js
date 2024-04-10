@@ -138,10 +138,30 @@ export const isUserLoggedIn = () => {
   return getUserStoreSignedIn();
 }
 
-export const isUserAdmin = async () => {
+export const isCurrentUserAdmin = async () => {
   let isadmin = await getDoc(doc(getFirestore(), "users/", getUserStoreUid())).then((doc) => { return doc.data().isadmin });
   console.log("Is current user admin? " + isadmin);
   return isadmin;
+}
+
+export const isUserUidAdmin = async (uid) => {
+    let isadmin = await getDoc(doc(getFirestore(), "users/", uid)).then((doc) => { return doc.data().isadmin });
+    console.log("Is user " + uid + " admin? " + isadmin);
+    return isadmin;
+}
+
+export const grantAdminStatus = async (uid)=> {
+  console.log("Tried to give admin status to " + uid);
+    await updateDoc(doc(getFirestore(), "users/", uid), {
+        isadmin: true
+    });
+}
+
+export const revokeAdminStatus = async (uid)=> {
+  console.log("Tried to revoke admin status of " + uid);
+    await updateDoc(doc(getFirestore(), "users/", uid), {
+        isadmin: false
+    });
 }
 
 export const getAllUsers = async () => {

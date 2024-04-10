@@ -3,7 +3,7 @@ import registered_users from '../../assets/registered_user.png';
 import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
 import { useNavigate } from 'react-router-dom';
-import {getUserEmailFromUid, isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
+import {getUserEmailFromUid, isCurrentUserAdmin, isUserLoggedIn} from '../../firebase/auth';
 import {getAllTransactions} from "../../firebase/firebase";
 import '../../style/transactions.css';
 const Transactions = () => {
@@ -17,7 +17,7 @@ const navigate = useNavigate();
             navigate('/login')
         }
 
-        if (!isUserAdmin()) {
+        if (!isCurrentUserAdmin()) {
             navigate('/dashboard')
         }
 

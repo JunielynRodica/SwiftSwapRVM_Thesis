@@ -3,7 +3,14 @@ import registered_users from '../../assets/registered_user.png';
 import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
 import { useNavigate } from 'react-router-dom';
-import {getAllUsers, isUserAdmin, isUserLoggedIn} from '../../firebase/auth';
+import {
+    getAllUsers,
+    grantAdminStatus,
+    isCurrentUserAdmin,
+    isUserLoggedIn,
+    isUserUidAdmin,
+    revokeAdminStatus
+} from '../../firebase/auth';
 import '../../style/accounts.css';
 
 const Accounts = () => {
@@ -17,7 +24,7 @@ const navigate = useNavigate();
             navigate('/login')
         }
 
-        if (!isUserAdmin()) {
+        if (!isCurrentUserAdmin()) {
             navigate('/dashboard')
         }
 
@@ -29,6 +36,16 @@ const navigate = useNavigate();
 
         populateData();
     }, []);
+
+    function toggleAdmin(uid) {
+        isUserUidAdmin(uid).then((result) => {
+            if (result) {
+                revokeAdminStatus(uid);
+            } else {
+                grantAdminStatus(uid);
+            }
+        });
+    }
 
     return (
         <div className="admin_body">
@@ -49,20 +66,33 @@ const navigate = useNavigate();
                    <th>Points</th>
                    <th>Email</th>
                    <th>User ID</th>
+                   <th>Admin</th>
+                   <th>Actions</th>
                  </tr>
            </thead>
                  <tbody>
                  {accounts.length > 0 ? accounts.map((account) => {
                      account = JSON.parse(account);
+                     console.log(account)
                         return (
                             <tr>
                                 <td>{account.studentNumber}</td>
                                 <td>{account.points}</td>
                                 <td>{account.email}</td>
                                 <td>{account.uid.substring(0, 8) + "..."}</td>
+                                <td id={"admin_" + account.uid}>{account.isadmin ? "Yes" : "No"}</td>
+                                <td><button onClick={ () => {
+                                    toggleAdmin(account.uid);
+                                    let admin_uid = "admin_" + account.uid;
+                                    let toggle_uid = "toggle_" + account.uid;
+                                    let admin_status = document.getElementById(admin_uid).innerHTML;
+                                    let toggle_button = document.getElementById(toggle_uid);
+                                    document.getElementById(admin_uid).innerHTML = admin_status === "Yes" ? "No" : "Yes";
+                                    toggle_button.innerHTML = admin_status === "Yes" ? "Make Admin" : "Revoke Admin";
+                                } } id={"toggle_" + account.uid}>{account.isadmin ? "Revoke Admin" : "Make Admin"}</button></td>
                             </tr>
                         )
-                 }) : <tr><td colSpan="4">Data is loading, please wait...</td></tr> }
+                 }) : <tr><td colSpan="6">Data is loading, please wait...</td></tr> }
                  </tbody>
              </table>
            </div>

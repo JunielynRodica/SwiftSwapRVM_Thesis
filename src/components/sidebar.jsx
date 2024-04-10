@@ -9,7 +9,7 @@ import {
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import rvmpic from '../assets/rvmpic.png';
 import { useAuth } from "../contexts/authContext";
-import {doSignOut, isUserAdmin} from '../firebase/auth'
+import {doSignOut, isCurrentUserAdmin} from '../firebase/auth'
 import {FaGear} from "react-icons/fa6";
 import {getUserStoreSignedIn, userStoreLogout} from "../contexts/userStore";
 
@@ -23,7 +23,7 @@ const Sidebar = ({ children }) => {
 
     useEffect(() => {
         async function getIsUserAdmin() {
-            await isUserAdmin().then((result) => {
+            await isCurrentUserAdmin().then((result) => {
                 if (result) {
                     setAdminUser(true);
                 }
