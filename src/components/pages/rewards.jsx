@@ -65,7 +65,7 @@ const Rewards = () => {
                             <p>You need to accumulate <br/><b>{reward.points} points </b>  to get <b>{reward.dispense} {reward.dispense > 1 ? reward.name + 's' : reward.name}</b></p>
                             <button className={points < reward.points ? "redeem-btn disabled" : "redeem-btn"}
                                     onClick={() => handleRedeem(reward.name, reward.points)}
-                                    disabled={points < reward.points}>Redeem</button>
+                                    disabled={points < reward.points || parseInt(reward.dispense) <= 0 }>Redeem</button>
                         </div>
                     )
                 })}

@@ -44,6 +44,7 @@ const navigate = useNavigate();
             setStockData(data);
         }
 
+        setStockData([])
         populateData();
     }, [update]);
 
