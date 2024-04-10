@@ -181,13 +181,48 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
     }, { merge: true });
 }
 
-export const addStock = async (item, quantity) => {
+export const setStock = async (item, quantity, points, dispense, iconUrl) => {
     let fs = getFirestore(app);
 
     await setDoc(doc(fs, "stock/", item), {
         name: item,
-        quantity: quantity
+        quantity: quantity,
+        points: points,
+        dispense: dispense,
+        iconUrl: iconUrl,
     }, { merge: true });
+}
+
+export const setStockCount = async (item, quantity) => {
+    let fs = getFirestore(app);
+
+    await updateDoc(doc(fs, "stock/", item), {
+        quantity: quantity
+    });
+}
+
+export const setStockIconUrl = async (item, iconUrl) => {
+    let fs = getFirestore(app);
+
+    await updateDoc(doc(fs, "stock/", item), {
+        iconUrl: iconUrl
+    });
+}
+
+export const setStockPointsCost = async (item, points) => {
+    let fs = getFirestore(app);
+
+    await updateDoc(doc(fs, "stock/", item), {
+        points: points
+    });
+}
+
+export const setStockDispenseAmount = async (item, dispense) => {
+    let fs = getFirestore(app);
+
+    await updateDoc(doc(fs, "stock/", item), {
+        dispense: dispense
+    });
 }
 
 export const getStock = async (item) => {
@@ -209,7 +244,7 @@ export const getAllStock = async () => {
     let data = [];
 
     snapshot.forEach((doc) => {
-        data.push({name: doc.data().name, quantity: doc.data().quantity});
+        data.push(doc.data());
     });
 
     return data;

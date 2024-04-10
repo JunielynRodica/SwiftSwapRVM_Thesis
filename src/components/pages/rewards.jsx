@@ -1,24 +1,16 @@
 import React, {useEffect, useState} from "react";
 import "../../style/rewards.css";
-import bondpaper from '../../assets/bpaper.png';
-import ballpen from '../../assets/bpen.png';
-import correctiontape from '../../assets/ctape.png';
-import eraser from '../../assets/eraser.png';
-import highlighter from '../../assets/hlighter.png';
-import notebook from '../../assets/ntbook.png';
-import paperclip from '../../assets/pclip.png';
-import pencil from '../../assets/pencil.png';
-import stickynote from '../../assets/snote.png';
 import rvmpic from '../../assets/rvmpic.png';
 import {
-    addDeductTransactionToCurrentUser,
-    getCurrentUserPoints,
+    addDeductTransactionToCurrentUser, getAllStock,
+    getCurrentUserPoints, getStock,
 } from "../../firebase/firebase";
 import {isUserLoggedIn} from "../../firebase/auth";
 import {useNavigate} from "react-router-dom";
 
 const Rewards = () => {
     const [points, setPoints] = useState(0);
+    const [rewards, setRewards] = useState([]);
     const nav = useNavigate();
 
     useEffect(() => {
@@ -27,6 +19,7 @@ const Rewards = () => {
 
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());
+            setRewards(await getAllStock());
         }
 
         fetchData();
@@ -36,103 +29,47 @@ const Rewards = () => {
       const confirmed = window.confirm(`Are you sure you want to redeem ${productName}?`);
       if (confirmed) {
           console.log(`Attempting to redeem ${productName}...`);
+          // Check if we have enough points
           if (points >= requiredPoints) {
-              setPoints(points - requiredPoints); // Update points after redemption
-              addDeductTransactionToCurrentUser(productName, requiredPoints); // Add transaction to user account
-              alert(`Redeeming ${productName}`);
+              // Check if we have enough stock
+              getStock(productName).then((stock) => {
+                  if (stock <= 0) {
+                      alert("Stock insufficient! You cannot redeem this product.");
+                  } else {
+                      setPoints(points - requiredPoints); // Update points after redemption
+                      addDeductTransactionToCurrentUser(productName, requiredPoints); // Add transaction to user account
+                      alert(`Redeeming ${productName}`);
+                  }
+              });
           } else {
               alert("Points insufficient! You cannot redeem this product.");
           }
       }
   };
   
-  
     return (
-      <div className="rewards_body">
-      <div className="header_rewards">
-        <img src={rvmpic} alt="logo" />
-        <h1>S W I F T S W A P | R E W A R D S <br />
-        Your Total SwiftSwap Points is: {points} points 
-        </h1>
-      </div>
-    
-        
-  
-  <section id="features">
-          <div className="product">
-          <img src={bondpaper} alt=""/>
-            <h3>Bond Paper</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 1 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('bondpaper', 1)} disabled={points < 1}
-  >Redeem </button>
+        <div className="rewards_body">
+            <div className="header_rewards">
+                <img src={rvmpic} alt="logo"/>
+                <h1>S W I F T S W A P | R E W A R D S <br/>
+                    Your Total SwiftSwap Points is: {points} points
+                </h1>
             </div>
-  
-             <div className="product">
-          <img src={ballpen} alt=""/>
-            <h3>Ballpen</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('ballpen', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-  
-             <div className="product">
-          <img src={correctiontape} alt=""/>
-            <h3>Correction Tape</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('correctiontape', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-
-          <div className="product">
-          <img src={eraser} alt=""/>
-            <h3>Eraser</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('eraser', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-  
-          <div className="product">
-          <img src={highlighter} alt=""/>
-            <h3>Highlighter</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('highlighter', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-  
-          <div className="product">
-          <img src={notebook} alt=""/>
-            <h3>Notebook</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('notebook', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-  
-          <div className="product">
-          <img src={paperclip} alt=""/>
-            <h3>Paper Clip</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('paperclip', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-  
-          <div className="product">
-          <img src={pencil} alt=""/>
-            <h3>Pencil</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('pencil', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-  
-          <div className="product">
-          <img src={stickynote} alt=""/>
-            <h3>Sticky Note</h3>
-            <p>You need to accumulate 5 points to get three pencils</p>
-            <button className={points < 5 ? "redeem-btn disabled" : "redeem-btn"} onClick={() => handleRedeem('stickynote', 5)} disabled={points < 5}
-  >Redeem </button>
-          </div>
-        </section>
-      </div>
-    );
-  };
-
+            {rewards.length === 0 ? <h2 style={{textAlign: "center", paddingTop: "20px"}}>Loading rewards, please wait...</h2> : null}
+            <section id="features">
+                {rewards.map((reward) => {
+                    return (
+                        <div className="product">
+                            <img src={reward.iconUrl} alt=""/>
+                            <h3>{reward.name}</h3>
+                            <p>You need to accumulate <br/><b>{reward.points} points </b>  to get <b>{reward.dispense} {reward.dispense > 1 ? reward.name + 's' : reward.name}</b></p>
+                            <button className={points < reward.points ? "redeem-btn disabled" : "redeem-btn"}
+                                    onClick={() => handleRedeem(reward.name, reward.points)}
+                                    disabled={points < reward.points}>Redeem</button>
+                        </div>
+                    )
+                })}
+            </section>
+        </div>
+    )};
 export default Rewards;
