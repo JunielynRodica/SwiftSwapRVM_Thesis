@@ -38,6 +38,11 @@ const navigate = useNavigate();
                     <img src={user_transaction} alt=""/>
                 </NavLink>
               </div>
+            <div className="access">
+                <NavLink to={"/admin/stock"}>
+                    <img src={user_transaction} alt=""/>
+                </NavLink>
+            </div>
         </section>
 
        </div>

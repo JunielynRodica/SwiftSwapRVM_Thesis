@@ -181,6 +181,40 @@ export const addIncrementTransactionToCurrentUser = async (points) => {
     }, { merge: true });
 }
 
+export const addStock = async (item, quantity) => {
+    let fs = getFirestore(app);
+
+    await setDoc(doc(fs, "stock/", item), {
+        name: item,
+        quantity: quantity
+    }, { merge: true });
+}
+
+export const getStock = async (item) => {
+    let fs = getFirestore(app);
+
+    let _doc = await getDoc(doc(fs, "stock/", item));
+    return _doc.data().quantity;
+}
+
+export const removeStock = async (item) => {
+    let fs = getFirestore(app);
+    await deleteDoc(doc(fs, "stock/", item));
+}
+
+export const getAllStock = async () => {
+    let fs = getFirestore(app);
+
+    let snapshot = await getDocs(collection(fs, "stock"));
+    let data = [];
+
+    snapshot.forEach((doc) => {
+        data.push({name: doc.data().name, quantity: doc.data().quantity});
+    });
+
+    return data;
+}
+
 export const processPendingTransactions = async (uid) => {
     // Don't process any pending transactions when we're offline
     if (!navigator.onLine) {

@@ -31,6 +31,7 @@ import Admin from "./components/admin/admin";
 import Accounts from "./components/admin/accounts";
 import Transactions from "./components/admin/transactions";
 import {doCreateUserWithEmailAndPassword} from "./firebase/auth";
+import Stock from "./components/admin/stock";
 
 let initOnce = false;
 
@@ -126,6 +127,10 @@ function App() {
             path: "/admin/transactions",
             element: <Transactions />,
         },
+        {
+            path: "/admin/stock",
+            element: <Stock />
+        }
     ];
     let routesElement = useRoutes(routesArray);
     return (
