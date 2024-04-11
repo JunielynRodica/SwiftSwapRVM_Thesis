@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import registered_users from '../../assets/registered_user.png';
 import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
+import rewards_stocks from '../../assets/rewards_stocks.png';
 import {NavLink, useNavigate} from 'react-router-dom';
 import {isCurrentUserAdmin, isUserLoggedIn} from '../../firebase/auth';
 import "../../style/admin.css";
@@ -40,7 +41,7 @@ const navigate = useNavigate();
               </div>
             <div className="access">
                 <NavLink to={"/admin/stock"}>
-                    <img src={user_transaction} alt=""/>
+                    <img src={rewards_stocks} alt=""/>
                 </NavLink>
             </div>
         </section>
