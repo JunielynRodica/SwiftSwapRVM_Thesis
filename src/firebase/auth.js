@@ -128,6 +128,16 @@ export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
     }
 };
 
+export const deleteUserUid = async (uid) => {
+
+  if (!navigator.onLine) {
+    return null;
+  }
+
+  const deleteUser = httpsCallable(fbfunctions, "deleteUser");
+  await deleteUser({ uid: uid });
+}
+
 export const doSignOut = () => {
   stopSessionTimeout();
   userStoreLogout();

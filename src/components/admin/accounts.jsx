@@ -4,6 +4,7 @@ import rvmpic from '../../assets/rvmpic.png';
 import user_transaction from '../../assets/user_transaction.png';
 import { useNavigate } from 'react-router-dom';
 import {
+    deleteUserUid,
     getAllUsers,
     grantAdminStatus,
     isCurrentUserAdmin,
@@ -67,7 +68,7 @@ const navigate = useNavigate();
                    <th>Email</th>
                    <th>User ID</th>
                    <th>Admin</th>
-                   <th>Actions</th>
+                   <th colSpan="2">Actions</th>
                  </tr>
            </thead>
                  <tbody>
@@ -90,6 +91,17 @@ const navigate = useNavigate();
                                     document.getElementById(admin_uid).innerHTML = admin_status === "Yes" ? "No" : "Yes";
                                     toggle_button.innerHTML = admin_status === "Yes" ? "Make Admin" : "Revoke Admin";
                                 } } id={"toggle_" + account.uid}>{account.isadmin ? "Revoke Admin" : "Make Admin"}</button></td>
+                                <td><button onClick={() => {
+                                    console.log("Delete user " + account.uid);
+                                    if (!navigator.onLine)                                    {
+                                        alert("You are offline. Please connect to the internet to delete a user.");
+                                        return;
+                                    }
+                                    if (window.confirm("Are you sure you want to delete this user?")) {
+                                        console.log("Deleting user " + account.uid);
+                                        deleteUserUid(account.uid);
+                                    }
+                                }}>Close Account</button></td>
                             </tr>
                         )
                  }) : <tr><td colSpan="6">Data is loading, please wait...</td></tr> }
