@@ -11,6 +11,7 @@ import rvmpic from '../assets/rvmpic.png';
 import { useAuth } from "../contexts/authContext";
 import {doSignOut, isCurrentUserAdmin} from '../firebase/auth'
 import {FaGear} from "react-icons/fa6";
+import { FaSignOutAlt } from "react-icons/fa";
 import {getUserStoreSignedIn, userStoreLogout} from "../contexts/userStore";
 
 const Sidebar = ({ children }) => {
@@ -61,6 +62,11 @@ const Sidebar = ({ children }) => {
             name: 'Admin',
             icon: <FaGear />,
         },
+        // {
+        //     path: '/login',
+        //     name: 'Logout',
+        //     icon: <FaSignOutAlt />,
+        // },
     ];
 
     // Filter out "Signin" and "Signup" items
@@ -100,6 +106,8 @@ const Sidebar = ({ children }) => {
                                 }) 
                             }}
                             style={{
+                                display: 'flex',
+                                alignItems: 'center',
                                 padding: '10px 50px',
                                 backgroundColor: '#71a46f',
                                 color: '#090b04',
@@ -112,6 +120,7 @@ const Sidebar = ({ children }) => {
                                 transition: 'background-color 0.5s ease', 
                             }}
                         >
+                            <FaSignOutAlt style={{ marginRight: '5px' }} />
                             Logout</button>
                         </div>
                             {/*<button className="logout_button" onClick={() => { doSignOut().then(() => { navigate('/login') }) }}>Logout</button>*/}

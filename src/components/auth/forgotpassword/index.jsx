@@ -17,7 +17,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         await doPasswordReset(email);
         nav('/login');
-        alert("Password reset link has been sent.");
+        alert("Password reset link has been sent. Check your inbox or spam to reset password.");
     }
 
     return (
