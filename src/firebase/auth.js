@@ -131,7 +131,8 @@ export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
 export const doSignOut = () => {
   stopSessionTimeout();
   userStoreLogout();
-  return auth.signOut();
+  auth.signOut();
+  return true;
 };
 
 export const isUserLoggedIn = () => {
@@ -139,6 +140,13 @@ export const isUserLoggedIn = () => {
 }
 
 export const isCurrentUserAdmin = async () => {
+  if (getUserStoreUid() === "")  {
+    // Something has gone wrong, reload the page
+    userStoreLogout();
+    window.location.reload();
+    return false;
+  }
+
   let isadmin = await getDoc(doc(getFirestore(), "users/", getUserStoreUid())).then((doc) => { return doc.data().isadmin });
   console.log("Is current user admin? " + isadmin);
   return isadmin;

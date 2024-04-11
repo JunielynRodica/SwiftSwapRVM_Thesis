@@ -19,6 +19,7 @@ export function getUserStoreUid() {
         // Something has gone wrong, reload the page
         userStoreLogout();
         window.location.reload();
+        return "";
     }
     return userUid;
 }
