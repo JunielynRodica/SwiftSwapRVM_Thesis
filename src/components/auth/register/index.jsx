@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import { useAuth } from '../../../contexts/authContext'
-import { doCreateUserWithEmailAndPassword } from '../../../firebase/auth'
+import {doCreateUserWithEmailAndPassword, isUserLoggedIn} from '../../../firebase/auth'
 import rvmpic1 from '../../../assets/rvmpic1.png';
 import email_icon from '../../../assets/Email.png';
 import password_icon from '../../../assets/Password.png';
@@ -10,7 +10,6 @@ import cpass_icon from '../../../assets/confirmpass.png';
 import '../../../style/register.css';
 
 const Register = () => {
-    const { userLoggedIn } = useAuth()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -29,7 +28,7 @@ const Register = () => {
         // <div>
 
         <section className="register">
-            {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
+            {isUserLoggedIn() && <Navigate to={'/dashboard'} replace={true} />}
             <div className='outer-wrapper'>
                 <div className="inner-wrapper">
                     <div className="register_left">
