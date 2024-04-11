@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import "../../style/rewards.css";
 import rvmpic from '../../assets/rvmpic.png';
 import {
-    addDeductTransactionToCurrentUser, getAllStock,
+    addDeductTransactionToCurrentUser, decrementStock, deductCurrentUserPoints, getAllStock,
     getCurrentUserPoints, getStock,
 } from "../../firebase/firebase";
 import {isUserLoggedIn} from "../../firebase/auth";
@@ -30,6 +30,9 @@ const Rewards = () => {
       if (confirmed) {
           console.log(`Attempting to redeem ${productName}...`);
           // Check if we have enough points
+          console.log("Points: " + points)
+          console.log("Required Points: " + requiredPoints)
+          console.log("Points - Required Pts: " + (points - requiredPoints))
           if (points >= requiredPoints) {
               // Check if we have enough stock
               getStock(productName).then((stock) => {
@@ -37,6 +40,7 @@ const Rewards = () => {
                       alert("Stock insufficient! You cannot redeem this product.");
                   } else {
                       setPoints(points - requiredPoints); // Update points after redemption
+                      decrementStock(productName);
                       addDeductTransactionToCurrentUser(productName, requiredPoints); // Add transaction to user account
                       alert(`Redeeming ${productName}`);
                   }

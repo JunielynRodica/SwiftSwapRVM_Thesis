@@ -225,6 +225,28 @@ export const setStockDispenseAmount = async (item, dispense) => {
     });
 }
 
+export const decrementStock = async (item) => {
+    let fs = getFirestore(app);
+
+    let stock = await getFirebaseStock(item);
+    console.log(stock);
+    if (stock.quantity < stock.dispense)
+        return false;
+
+    await updateDoc(doc(fs, "stock/", item), {
+        quantity: stock.quantity - stock.dispense
+    });
+
+    return true;
+}
+
+export const getFirebaseStock = async (item) => {
+    let fs = getFirestore(app);
+
+    let _doc = await getDoc(doc(fs, "stock/", item));
+    return _doc.data();
+}
+
 export const getStock = async (item) => {
     let fs = getFirestore(app);
 
