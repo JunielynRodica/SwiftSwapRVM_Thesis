@@ -42,7 +42,6 @@ const TransactionHistory = () => {
                             </tr>
                         );
                     });
-
                     setOutput(_outputHtml);
                 }
             });
@@ -67,6 +66,14 @@ const TransactionHistory = () => {
             </thead>
             <tbody>
                 { hasData ? output : <tr><td colSpan="5">No transaction history available</td></tr> }
+                <td colSpan="3">Current Point Total</td>
+            <td>{transactions.reduce((acc, transaction) => {
+                if (transaction.type === 'accumulated') {
+                    return acc + transaction.points;
+                } else {
+                    return acc - transaction.points;
+                }}, 0)}</td>
+            <td></td>
             </tbody>
           </table>
         </div>
