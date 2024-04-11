@@ -130,12 +130,13 @@ const Login = () => {
                     <div className="left-content">
                         {
                             isScanning ?
-                                <div className="scanner">
+                                <div className="scanner" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', }}>
                                     <p className="scanning_text"> </p>
                                     <QrReader
                                         delay={100}
                                         onError={handleError}
                                         onScan={handleScan}
+                                        style={{ width: '100%', maxWidth: '500px' }}
                                     />
                                     <button className="cancel_button" onClick={() => stopScanning()} >Cancel</button>
                                 </div>

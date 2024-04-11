@@ -90,7 +90,7 @@ width:auto;
     cursor: pointer;
     border: none;
     outline: none;
-    
+     margin-top: 10px; /* Optional: Adjust the top margin as needed */  
 }
 .right-content {
     flex: 1;
