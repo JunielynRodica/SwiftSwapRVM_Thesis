@@ -92,45 +92,15 @@ const Sidebar = ({ children }) => {
                         <div style={{ display: isOpen ? "block" : "none" }} className="link_text">{item.name}</div>
                     </NavLink>
                 ))}
-                {/* <div>Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, you are now logged in.</div> */}
-                {
-                    (getUserStoreSignedIn())
-                        ?
-                        <>
-                        <div  className="logout_button" style={{ display: isOpen ? "block" : "none", justifyContent: 'center', marginTop: '200px', marginLeft: '50px', }}>
-                        <button 
-                            onClick={() => { 
-                                doSignOut().then(() => {
-                                    userStoreLogout()
-                                    navigate('/login')
-                                }) 
-                            }}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                padding: '10px 50px',
-                                backgroundColor: '#71a46f',
-                                color: '#090b04',
-                                fontFamily: 'Segoe UI',
-                                fontWeight: 'bold',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                                transition: 'background-color 0.5s ease', 
-                            }}
-                        >
-                            <FaSignOutAlt style={{ marginRight: '5px' }} />
-                            Logout</button>
-                        </div>
-                            {/*<button className="logout_button" onClick={() => { doSignOut().then(() => { navigate('/login') }) }}>Logout</button>*/}
-                        </>
-                        :
-                        <>
-                            <Link to={'/login'}>Login</Link>
-                            <Link to={'/register'}>Register New Account</Link>
-                        </>
-                }
+                <NavLink className="link" onClick={() => {
+                    doSignOut().then(() => {
+                        userStoreLogout()
+                        navigate('/login')
+                    })
+                }}>
+                    <FaSignOutAlt className="icon"/>
+                    <div style={{ display: isOpen ? "block" : "none" }} className="link_text">Logout</div>
+                </NavLink>
             </div>
             <main>{children}</main>
         </div>
