@@ -93,10 +93,8 @@ const Sidebar = ({ children }) => {
                     </NavLink>
                 ))}
                 <NavLink className="link" onClick={() => {
-                    doSignOut().then(() => {
-                        userStoreLogout()
-                        navigate('/login')
-                    })
+                    doSignOut()
+                    navigate('/login')
                 }}>
                     <FaSignOutAlt className="icon"/>
                     <div style={{ display: isOpen ? "block" : "none" }} className="link_text">Logout</div>
