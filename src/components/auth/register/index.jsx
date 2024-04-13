@@ -16,12 +16,22 @@ const Register = () => {
     const [isRegistering, setIsRegistering] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const [studentNumber, setStudentNumber] = useState('')
+    const [reRender, setReRender] = useState(false)
 
     const onSubmit = async (e) => {
         e.preventDefault()
         if (!isRegistering) {
             setIsRegistering(true)
             await doCreateUserWithEmailAndPassword(email, password, studentNumber)
+                .then(() => {
+                    setIsRegistering(false)
+                    setErrorMessage('')
+                    setReRender(!reRender)
+                })
+                .catch((error) => {
+                    setIsRegistering(false)
+                    alert(error.message)
+                })
         }
     }
     return (
