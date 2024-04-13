@@ -5,12 +5,15 @@ import {
     addDeductTransactionToCurrentUser, decrementStock, deductCurrentUserPoints, getAllStock,
     getCurrentUserPoints, getStock,
 } from "../../firebase/firebase";
-import {isUserLoggedIn} from "../../firebase/auth";
+import {isCurrentUserAdmin, isUserLoggedIn} from "../../firebase/auth";
 import {useNavigate} from "react-router-dom";
 
 const Rewards = () => {
     const [points, setPoints] = useState(0);
     const [rewards, setRewards] = useState([]);
+    const [isCurrentMachineRaspi, setIsCurrentMachineRaspi] = useState(false);
+    const [localCurrentUserAdmin , setlocalCurrentUserAdmin] = useState(false);
+    const [canRedeem, setCanRedeem] = useState(false)
     const nav = useNavigate();
 
     useEffect(() => {
@@ -20,6 +23,13 @@ const Rewards = () => {
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());
             setRewards(await getAllStock());
+            setIsCurrentMachineRaspi(window.navigator.platform.startsWith("Linux armv"));
+            setlocalCurrentUserAdmin(await isCurrentUserAdmin());
+            setCanRedeem(isCurrentMachineRaspi || await isCurrentUserAdmin());
+
+            console.log("Is Current Machine Raspi: " + isCurrentMachineRaspi)
+            console.log("Local Current User Admin: " + localCurrentUserAdmin)
+            console.log("Can Redeem: " + canRedeem)
         }
 
         fetchData();
@@ -50,7 +60,31 @@ const Rewards = () => {
           }
       }
   };
-  
+
+    function returnRewards(redeemable) {
+        return (
+            <section id="features" ref={(node) => {
+                if (node) {
+                    node.style.setProperty("padding-left", "0px", "important");
+                }}}>
+                {rewards.map((reward) => {
+                return (
+                    <div className="product">
+                        <img src={reward.iconUrl} alt=""/>
+                        <h3>{reward.name}</h3>
+                        <p>You need to accumulate <br/><b>{reward.points} points </b> to
+                            get <b>{reward.dispense} {reward.dispense > 1 ? reward.name + 's' : reward.name}</b></p>
+                        { redeemable ?
+                        <button className={points < reward.points ? "redeem-btn disabled" : "redeem-btn"}
+                                onClick={() => handleRedeem(reward.name, reward.points)}
+                                disabled={points < reward.points || parseInt(reward.dispense) <= 0}>Redeem
+                        </button> : null }
+                    </div>
+                )
+            })}
+        </section>)
+    }
+
     return (
         <div className="rewards_body">
             <div className="header_rewards">
@@ -59,21 +93,18 @@ const Rewards = () => {
                     Your Total SwiftSwap Points is: {points} points
                 </h1>
             </div>
-            {rewards.length === 0 ? <h2 style={{textAlign: "center", paddingTop: "20px"}}>Loading rewards, please wait...</h2> : null}
-            <section id="features">
-                {rewards.map((reward) => {
-                    return (
-                        <div className="product">
-                            <img src={reward.iconUrl} alt=""/>
-                            <h3>{reward.name}</h3>
-                            <p>You need to accumulate <br/><b>{reward.points} points </b>  to get <b>{reward.dispense} {reward.dispense > 1 ? reward.name + 's' : reward.name}</b></p>
-                            <button className={points < reward.points ? "redeem-btn disabled" : "redeem-btn"}
-                                    onClick={() => handleRedeem(reward.name, reward.points)}
-                                    disabled={points < reward.points || parseInt(reward.dispense) <= 0 }>Redeem</button>
-                        </div>
-                    )
-                })}
-            </section>
+
+            { /** Not an admin and not on the machine **/ }
+            {!canRedeem ? rewards.length === 0 ? null : <h2 style={{textAlign: "center", paddingTop: "20px"}}>Reward redemption can only be done on the machine.</h2> : null}
+            {!canRedeem ? returnRewards(false) : null}
+
+            { /** Admin mode message **/ }
+            {localCurrentUserAdmin ? <h2 style={{textAlign: "center", paddingTop: "20px"}}>You are in admin mode, redeem page is enabled.</h2> : null}
+
+            { /** Admin or on the machine **/ }
+            {canRedeem ? rewards.length === 0 ? <h2 style={{textAlign: "center", paddingTop: "20px"}}>Loading rewards, please wait...</h2> : null : null}
+            {canRedeem ? returnRewards(true) : null}
         </div>
-    )};
+    )
+};
 export default Rewards;
