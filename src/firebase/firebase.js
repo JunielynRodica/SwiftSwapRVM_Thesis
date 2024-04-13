@@ -186,9 +186,9 @@ export const setStock = async (item, quantity, points, dispense, iconUrl) => {
 
     await setDoc(doc(fs, "stock/", item), {
         name: item,
-        quantity: quantity,
-        points: points,
-        dispense: dispense,
+        quantity: parseInt(quantity),
+        points: parseInt(points),
+        dispense: parseInt(dispense),
         iconUrl: iconUrl,
     }, { merge: true });
 }
@@ -197,7 +197,7 @@ export const setStockCount = async (item, quantity) => {
     let fs = getFirestore(app);
 
     await updateDoc(doc(fs, "stock/", item), {
-        quantity: quantity
+        quantity: parseInt(quantity)
     });
 }
 
@@ -213,7 +213,7 @@ export const setStockPointsCost = async (item, points) => {
     let fs = getFirestore(app);
 
     await updateDoc(doc(fs, "stock/", item), {
-        points: points
+        points: parseInt(points)
     });
 }
 
@@ -221,7 +221,7 @@ export const setStockDispenseAmount = async (item, dispense) => {
     let fs = getFirestore(app);
 
     await updateDoc(doc(fs, "stock/", item), {
-        dispense: dispense
+        dispense: parseInt(dispense)
     });
 }
 
@@ -229,12 +229,16 @@ export const decrementStock = async (item) => {
     let fs = getFirestore(app);
 
     let stock = await getFirebaseStock(item);
+    console.log("Decrementing stock")
     console.log(stock);
-    if (stock.quantity < stock.dispense)
+    if (parseInt(stock.quantity) < parseInt(stock.dispense)) {
+        console.log("Not enough stock to dispense")
         return false;
+    }
 
+    console.log("Calling firebase to decrement stock")
     await updateDoc(doc(fs, "stock/", item), {
-        quantity: stock.quantity - stock.dispense
+        quantity: parseInt(stock.quantity) - parseInt(stock.dispense)
     });
 
     return true;
@@ -251,7 +255,7 @@ export const getStock = async (item) => {
     let fs = getFirestore(app);
 
     let _doc = await getDoc(doc(fs, "stock/", item));
-    return _doc.data().quantity;
+    return parseInt(_doc.data().quantity);
 }
 
 export const removeStock = async (item) => {
