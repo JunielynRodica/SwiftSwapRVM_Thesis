@@ -36,95 +36,84 @@ import Stock from "./components/admin/stock";
 let initOnce = false;
 
 function App() {
+    if (!initOnce) {
+        initializeFirestore(app, {localCache: persistentLocalCache()});
+        let fs = getFirestore(app);
 
-    if (process.env.REACT_APP_EMULATED === "true") {
-        if (!initOnce) {
-            getAuth(app);
-            connectAuthEmulator(getAuth(app), "http://127.0.0.1:9099",);
-            connectFirestoreEmulator(getFirestore(app), "localhost", 8080);
-            connectFunctionsEmulator(getFunctions(app), "localhost", 5001);
-            doCreateUserWithEmailAndPassword("admin@gmail.com", "password", 1234);
-            initOnce = true;
-        }
-    } else {
-        if (!initOnce) {
-            initializeFirestore(app, {localCache: persistentLocalCache()});
-            let fs = getFirestore(app);
-
-            if (navigator.onLine === false) {
-                disableNetwork(fs).then(() => {
-                    console.log("Firebase: Network disabled");
-                });
-            }
-
-            window.addEventListener("online", () => {
-                console.log("Browser is now online");
-                enableNetwork(fs).then(() => {
-                    console.log("Firebase: Network enabled");
-                });
-            }, false);
-
-            window.addEventListener("offline", () => {
-                console.log("Browser is now offline");
-                disableNetwork(fs).then(() => {
-                    console.log("Firebase: Network disabled");
-                });
+        if (navigator.onLine === false) {
+            disableNetwork(fs).then(() => {
+                console.log("Firebase: Network disabled");
             });
-
-            // Get all documents in the root collection in Firebase to store them in the cache
-            getDocs(collection(fs, "users")).then((querySnapshot) => {});
-            initOnce = true;
         }
+
+        window.addEventListener("online", () => {
+            console.log("Browser is now online");
+            enableNetwork(fs).then(() => {
+                console.log("Firebase: Network enabled");
+            });
+        }, false);
+
+        window.addEventListener("offline", () => {
+            console.log("Browser is now offline");
+            disableNetwork(fs).then(() => {
+                console.log("Firebase: Network disabled");
+            });
+        });
+
+        // Get all documents in the root collection in Firebase to store them in the cache
+        getDocs(collection(fs, "users")).then((querySnapshot) => {
+        });
+        initOnce = true;
     }
 
     const routesArray = [
         {
             path: "*",
-            element: <Login />,
+            element: <Login/>,
         },
         {
             path: "/login",
-            element: <Login />,
+            element: <Login/>,
         },
         {
             path: "/register",
-            element: <Register />,
+            element: <Register/>,
         },
         {
             path: "/forgotPassword",
-            element: <ForgotPassword />,
+            element: <ForgotPassword/>,
         },
         {
             path: "/dashboard",
-            element: <Dashboard />,
+            element: <Dashboard/>,
         },
         {
             path: "/rewards",
-            element: <Rewards />,
+            element: <Rewards/>,
         },
         {
             path: "/transactionHistory",
-            element: <TransactionHistory />,
+            element: <TransactionHistory/>,
         },
         {
             path: "/about",
-            element: <About />,
+            element: <About/>,
         },
         {
             path: "/admin",
-            element: <Admin />
+            element: <Admin/>
         },
         {
             path: "/admin/accounts",
-            element: <Accounts />,
+            element: <Accounts/>,
         },
         {
             path: "/admin/transactions",
-            element: <Transactions />,
+            element: <Transactions/>,
         },
         {
             path: "/admin/stock",
-            element: <Stock />
+            element: <Stock/>
         }
     ];
     let routesElement = useRoutes(routesArray);
