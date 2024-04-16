@@ -114,13 +114,10 @@ export const getCurrentUserTransactions = async () => {
 export const getUserExistsInFirestore = async (uid) => {
     let fs = getFirestore(app);
 
-    console.log("TRYING TO GET UID " + uid)
-
     try {
         let _doc = await getDocFromCache(doc(fs, "users/", uid));
         return _doc.exists();
     } catch (e) {
-        console.log(e);
         return null;
     }
 }
@@ -229,14 +226,12 @@ export const decrementStock = async (item) => {
     let fs = getFirestore(app);
 
     let stock = await getFirebaseStock(item);
-    console.log("Decrementing stock")
-    console.log(stock);
+    console.log("Decrementing stock for " + item);
     if (parseInt(stock.quantity) < parseInt(stock.dispense)) {
-        console.log("Not enough stock to dispense")
+        console.log("Not enough stock to dispense " + item + "( " + stock.quantity + " < " + stock.dispense + " )");
         return false;
     }
 
-    console.log("Calling firebase to decrement stock")
     await updateDoc(doc(fs, "stock/", item), {
         quantity: parseInt(stock.quantity) - parseInt(stock.dispense)
     });

@@ -40,7 +40,6 @@ const navigate = useNavigate();
 
         async function populateData() {
             let data = await getAllStock();
-            console.log(data);
             setStockData(data);
         }
 

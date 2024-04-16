@@ -72,12 +72,7 @@ function App() {
             });
 
             // Get all documents in the root collection in Firebase to store them in the cache
-            getDocs(collection(fs, "users")).then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    console.log(querySnapshot.metadata.fromCache ? "FROM CACHE" : "NOT FROM CACHE")
-                    console.log(doc.id, " => ", doc.data());
-                });
-            });
+            getDocs(collection(fs, "users")).then((querySnapshot) => {});
             initOnce = true;
         }
     }

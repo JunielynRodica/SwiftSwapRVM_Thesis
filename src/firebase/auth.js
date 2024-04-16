@@ -43,7 +43,7 @@ const sessionTimeoutMS = 15 * 60 * 1000;
 export const doCreateUserWithEmailAndPassword = async (email, password, studentNumber) => {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   const fs = getFirestore();
-  console.log("CREATING ACCOUNT WITH STUDENT NUMBER " + studentNumber)
+  console.log("Creating account with student number " + studentNumber)
   await setDoc(doc(fs, "users/", cred.user.uid), {
     isadmin: false,
     email: email,
@@ -83,10 +83,10 @@ export const doSignInWithCustomToken = async (access_token) => {
   const uid = decrypt.split('|')[0];
   const validity = decrypt.split('|')[1];
 
-  console.log("QR LOGIN ATTEMPT")
+  console.log("Trying to login with QR (Online)")
 
     if (validity < new Date().getTime()) {
-      console.log("QR CODE EXPIRED")
+      console.log("QR Code has expired (Online)")
       return null;
     }
 
@@ -104,7 +104,7 @@ export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
     const decrypt = await CryptoJS.AES.decrypt(qr_encrypted, process.env.REACT_APP_cryptokey).toString(CryptoJS.enc.Utf8);
     const uid = decrypt.split('|')[0];
 
-    console.log("OFFLINE QR LOGIN ATTEMPT")
+    console.log("Trying to login with QR (Offline)")
 
     // Disable validity check for offline login
 
@@ -116,10 +116,9 @@ export const doOfflineSignInWithQrCode = async (qr_encrypted) => {
 
     let doesUserExist = await getUserExistsInFirestore(uid);
     if (!doesUserExist) {
-      console.log("USER DOES NOT EXIST IN LOCAL COPY OF FIREBASE DATABASE")
+      console.log("QR Code login (Offline) failed: User does not exist in Firestore")
       return null;
     } else {
-      console.log("OFFLINE QR CODE LOGIN PASSED")
       let user = await getDoc(doc(getFirestore(), "users/", uid)).then((doc) => { return doc.data() });
       userStoreLogin(user.uid, user.email, "");
 
@@ -157,34 +156,27 @@ export const isCurrentUserAdmin = async () => {
     return false;
   }
 
-  let isadmin = await getDoc(doc(getFirestore(), "users/", getUserStoreUid())).then((doc) => { return doc.data().isadmin });
-  console.log("Is current user admin? " + isadmin);
-  return isadmin;
+  return isUserUidAdmin(getUserStoreUid());
 }
 
 export const isUserUidAdmin = async (uid) => {
     let isadmin = await getDoc(doc(getFirestore(), "users/", uid)).then((doc) => { return doc.data().isadmin });
-    console.log("Is user " + uid + " admin? " + isadmin);
     return isadmin;
 }
 
 export const grantAdminStatus = async (uid)=> {
-  console.log("Tried to give admin status to " + uid);
     await updateDoc(doc(getFirestore(), "users/", uid), {
         isadmin: true
     });
 }
 
 export const revokeAdminStatus = async (uid)=> {
-  console.log("Tried to revoke admin status of " + uid);
     await updateDoc(doc(getFirestore(), "users/", uid), {
         isadmin: false
     });
 }
 
 export const getAllUsers = async () => {
-  console.log("GETALLUSERS CALLED")
-
   const users = []
   const snapshot = await getDocs(collection(getFirestore(), "users"));
 
@@ -226,7 +218,6 @@ export const getQRCodeData = () => {
   const validity = new Date().getTime() + (2 * 24 * 60 * 60 * 1000);
 
   // returns a unix timestamp
-  console.log("QR CODE VALIDITY: " + validity.toString());
   const encrypted = CryptoJS.AES.encrypt(data_to_encrypt + '|' + validity.toString(), process.env.REACT_APP_cryptokey).toString();
   return encrypted;
 }

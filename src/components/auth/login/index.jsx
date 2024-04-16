@@ -97,7 +97,7 @@ const Login = () => {
         setIsSigningIn(true);
 
         if (!navigator.onLine) {
-            console.log("Doing offline sign in with QR")
+           console.log("Doing offline sign in with QR")
            await doOfflineSignInWithQrCode(data.text).then((res) => {
                 if (res) {
                     saveQRCreds(res.qr_encrypted);

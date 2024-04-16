@@ -31,7 +31,6 @@ const navigate = useNavigate();
 
         async function populateData() {
             let data = await getAllUsers();
-            console.log(data);
             setAccounts(data);
         }
 
@@ -74,7 +73,6 @@ const navigate = useNavigate();
                  <tbody>
                  {accounts.length > 0 ? accounts.map((account) => {
                      account = JSON.parse(account);
-                     console.log(account)
                         return (
                             <tr>
                                 <td>{account.studentNumber}</td>
@@ -92,13 +90,11 @@ const navigate = useNavigate();
                                     toggle_button.innerHTML = admin_status === "Yes" ? "Make Admin" : "Revoke Admin";
                                 } } id={"toggle_" + account.uid}>{account.isadmin ? "Revoke Admin" : "Make Admin"}</button></td>
                                 <td><button onClick={() => {
-                                    console.log("Delete user " + account.uid);
-                                    if (!navigator.onLine)                                    {
+                                    if (!navigator.onLine) {
                                         alert("You are offline. Please connect to the internet to delete a user.");
                                         return;
                                     }
-                                    if (window.confirm("Are you sure you want to delete this user?")) {
-                                        console.log("Deleting user " + account.uid);
+                                    if (window.confirm("Are you sure you want to delete user " + account.email + "?")) {
                                         deleteUserUid(account.uid);
                                     }
                                 }}>Close Account</button></td>

@@ -22,16 +22,11 @@ const navigate = useNavigate();
         }
 
         async function populateData() {
-            console.log("get all transactions")
             let data = await getAllTransactions();
-            console.log("After get all transactions")
-            console.log(data);
             setTransactions(data);
         }
 
-        console.log("populateData called")
         populateData();
-        console.log("populateData complete")
     }, []);
 
     return (
