@@ -48,7 +48,6 @@ const Dashboard = () => {
         <img src={rvmpic} alt='logo'></img>
         <h1>S W I F T S W A P</h1>
       </div>
-      <body>
       <div className='user'>
         <div>Hello {displayName ? displayName : displayEmail}, it's nice to see you again!</div>
         <div>SwiftSwap Points: {points}</div>
@@ -97,7 +96,6 @@ const Dashboard = () => {
           <img src={step5} alt="step5"></img>
           <img src={step6} alt="step6"></img>
         </div>
-      </body>
     </div>
   );
 };
