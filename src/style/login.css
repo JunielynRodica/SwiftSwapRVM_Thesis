@@ -97,6 +97,16 @@ width:auto;
     text-align: center;
 
 }
+.login .right-content {
+    width: 100%;
+}
+.login .right-content .input{
+    padding-right: 15px;
+}
+.login .right-content .input input {
+  padding: 10px;
+}
+
 
 .header_login{
     margin-bottom: 30px;
