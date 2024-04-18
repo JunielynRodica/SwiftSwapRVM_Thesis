@@ -51,27 +51,30 @@
 
 .reg_icon {
     margin: auto;
-    max-width: 130%;
-    height: auto;
+    max-width: 100%;
+    height: 250px;
     margin-bottom: 20px;
     padding-right:0;
     padding-left:10%;
+}
+@media (min-width:768px) {
+    .reg_icon {
+        max-width: 130%;
+        height: auto;
+    }
 }
 
 .right-content {
     flex: 1; 
     text-align: center;
     width:55%;
-    
 }
 
 .header_register {
-    margin-bottom: 30px;
     color: #3A4D39; 
     font-size: xx-large; 
     text-align: center; 
     padding: 0; 
-    margin: 0; 
     border: none; 
     text-align: center;
 }
@@ -113,6 +116,7 @@
     outline: none;
     color: #3A4D39;
     font-size: 19px;
+    padding: 10px;
 }
 .input img {
     margin-right: 15px; 
@@ -165,7 +169,7 @@
     background: rgb(251, 250, 225);
     padding:10px;
     border-radius: 5px;
-    height:75%;
+    max-width: 600px;
 }
 .submit {
     width: 220px;
