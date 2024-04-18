@@ -4,7 +4,7 @@
     background: linear-gradient(to right, #ECE3CE, #71a46f);
     border-bottom: 4px solid #739072; 
     border-radius: 10px;
-    margin-left: 100px;
+    margin-left: 0;
     flex-wrap: wrap;
     
   }
@@ -19,13 +19,18 @@
     font-weight: bold;
   }
 .transactions-table-container {
-    width: 100vw;
+    width: 100%;
     height: 100vw;
     text-align: center;
-    padding: 20px;
+    padding: 20px 0;
     background: #e4eace;
     color:#3a4d39;
     font-weight: 500;
+  }
+  .transactions-table-container h2 {
+    @media (max-width:768px) {
+      font-size: 20px;
+    }
   }
   
   h2{
@@ -38,7 +43,8 @@
     max-width: max-content;
     margin: 20px auto;
     border: 5px solid #3a4d39;
-    padding: 50px;
+    padding: 20px;
+    overflow-x: auto;
   }
   
   .transactions-table {
