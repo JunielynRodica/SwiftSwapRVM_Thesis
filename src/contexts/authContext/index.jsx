@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -8,7 +8,7 @@ import Rewards from "../../components/pages/rewards";
 import About from "../../components/pages/about";
 import Dashboard from "../../components/pages/dashboard";
 import TransactionHistory from "../../components/pages/TransactionHistory";
-import {getUserStoreSignedIn, setUserStoreSignedIn} from "../userStore";
+import {getUserStoreSignedIn, setUserStoreSignedIn, userStoreLogout} from "../userStore";
 
 const AuthContext = React.createContext();
 
@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
 
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
     return unsubscribe;
-  }, []);
+  }, [getUserStoreSignedIn()]);
 
   async function initializeUser(user) {
     if (user) {
@@ -54,16 +54,13 @@ export function AuthProvider({ children }) {
     setCurrentUser
   };
 
-  if (getUserStoreSignedIn())
-    setLoading(false)
-
   return (
     <AuthContext.Provider value={value}>
       {!loading && (getUserStoreSignedIn()) ? (
         <Sidebar>
           {children}
         </Sidebar>
-      ) : children
+      ) : <Navigate to="/login" />
       }
     </AuthContext.Provider>
   );
