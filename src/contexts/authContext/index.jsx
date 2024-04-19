@@ -23,6 +23,9 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (getUserStoreSignedIn())
+      setLoading(false)
+
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
     return unsubscribe;
   }, []);
@@ -50,6 +53,9 @@ export function AuthProvider({ children }) {
     currentUser,
     setCurrentUser
   };
+
+  if (getUserStoreSignedIn())
+    setLoading(false)
 
   return (
     <AuthContext.Provider value={value}>
