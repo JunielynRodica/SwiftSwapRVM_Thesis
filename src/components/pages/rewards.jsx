@@ -23,7 +23,7 @@ const Rewards = () => {
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());
             setRewards(await getAllStock());
-            setIsCurrentMachineRaspi(window.navigator.platform.startsWith("Linux armv"));
+            setIsCurrentMachineRaspi(window.navigator.platform.startsWith("Linux arm"));
             setlocalCurrentUserAdmin(await isCurrentUserAdmin());
             setCanRedeem(isCurrentMachineRaspi || await isCurrentUserAdmin());
 
@@ -46,7 +46,7 @@ const Rewards = () => {
           if (points >= requiredPoints) {
               // Check if we have enough stock
               getStock(productName).then((stock) => {
-                  if (stock <= 0) {
+                  if (stock <= stock.dispense) {
                       alert("Stock insufficient! You cannot redeem this product.");
                   } else {
                       setPoints(points - requiredPoints); // Update points after redemption
