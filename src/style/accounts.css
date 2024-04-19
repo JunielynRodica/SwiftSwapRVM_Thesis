@@ -1,13 +1,18 @@
 .user-table-container {
-    width: 100vw;
+    width: 100%;
     height: 100vw;
     text-align: center;
-    padding: 20px;
+    padding: 20px 0;
     background: #e4eace;
     color:#3a4d39;
     font-weight: 500;
   }
   
+  .user-table-container h2 {
+    @media (max-width:768px) {
+      font-size: 25px;
+    }
+  }
   h2{
     font-size: xxx-large;
     font-family: 'Segoe UI', serif;
@@ -18,7 +23,8 @@
     max-width: max-content;
     margin: 20px auto;
     border: 5px solid #3a4d39;
-    padding: 50px;
+    padding: 20px;
+    overflow-x: auto;
   }
   
   .user-table {

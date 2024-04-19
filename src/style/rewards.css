@@ -27,6 +27,15 @@
   .product p {
     color: #333;
   }
+  .rewards_body {
+    padding-left:60px;
+  }
+  @media (max-width:768px) {
+    .rewards_body h2 {
+      font-size: 20px;
+    }
+  }
+
   
   .header_rewards{
     display: flex;
@@ -34,8 +43,13 @@
     background: linear-gradient(to right, #ECE3CE, #71a46f);
     border-bottom: 4px solid #739072; 
     border-radius: 10px;
-    margin-left: 100px;
     flex-wrap: wrap;
+  }
+  .header_dashboard img {
+    max-width: 100%;
+  }
+  .header_dashboard h1 {
+    font-size: 24px;
   }
 
   .rewards_img{
