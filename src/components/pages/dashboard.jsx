@@ -18,7 +18,7 @@ import rvmpic from '../../assets/rvmpic.png';
 import { useQRStore } from "../../store/useQRCreds";
 import { getCurrentUserPoints } from "../../firebase/firebase";
 import Login from "../auth/login";
-import {isUserLoggedIn} from "../../firebase/auth";
+import {getQRCodeData, isUserLoggedIn} from "../../firebase/auth";
 import {getUserStoreDisplayName, getUserStoreEmail} from "../../contexts/userStore";
 
 const Dashboard = () => {
@@ -26,13 +26,17 @@ const Dashboard = () => {
   const [displayName, setDisplayName] = useState("");
   const [displayEmail, setDisplayEmail] = useState("");
 
-  const { QRCreds } = useQRStore();
+  const { QRCreds, saveQRCreds } = useQRStore();
 
   useEffect(() => {
     const fetchData = async () => {
       setPoints(await getCurrentUserPoints());
       setDisplayName(getUserStoreDisplayName());
       setDisplayEmail(getUserStoreEmail());
+
+      if (QRCreds == null) {
+        saveQRCreds(getQRCodeData());
+      }
     }
 
     fetchData();
