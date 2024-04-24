@@ -64,7 +64,11 @@ function App() {
         getDocs(collection(fs, "users")).then((querySnapshot) => {
         });
         initOnce = true;
-    }
+    
+console.log("LOGON");
+if (!(getAuth(app).currentUser))
+    if (getAuth(app).currentUser.metadata.lastSignInDate)
+     console.log(getAuth(app).currentUser.metadata.lastSignInDate);
 
     const routesArray = [
         {
