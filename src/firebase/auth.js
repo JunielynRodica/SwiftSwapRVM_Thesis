@@ -58,12 +58,16 @@ export const doCreateUserWithEmailAndPassword = async (email, password, studentN
 };
 
 export const doSignInWithEmailAndPassword = async (email, password) => {
-  const cred = await signInWithEmailAndPassword(auth, email, password);
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
 
-  await processPendingTransactions(cred.user.uid);
-  startSessionTimeout(sessionTimeoutMS);
-  userStoreLogin(cred.user.uid, email, "");
-  return { qr_encrypted: getQRCodeData() };
+    await processPendingTransactions(cred.user.uid);
+    startSessionTimeout(sessionTimeoutMS);
+    userStoreLogin(cred.user.uid, email, "");
+    return {qr_encrypted: getQRCodeData()};
+  } catch (e) {
+    return null;
+  }
 };
 
 export const doSignInWithCustomToken = async (access_token) => {
