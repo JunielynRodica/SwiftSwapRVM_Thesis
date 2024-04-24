@@ -27,6 +27,7 @@ const Register = () => {
                     setIsRegistering(false)
                     setErrorMessage('')
                     setReRender(!reRender)
+                    window.location.href = '/dashboard'
                 })
                 .catch((error) => {
                     setIsRegistering(false)
