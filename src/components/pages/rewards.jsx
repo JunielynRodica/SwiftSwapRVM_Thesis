@@ -34,7 +34,7 @@ const Rewards = () => {
 
             console.log("===USER AGENT===");
             console.log(window.navigator.userAgent);
-            console.log(window.navigator.userAgent.includes("X11; CrOS");
+            console.log(window.navigator.userAgent.includes("X11; CrOS"));
 console.log(window.navigator.userAgent.includes("Rasp"));
 console.log(window.navigator.userAgent.includes("arm"));
 
