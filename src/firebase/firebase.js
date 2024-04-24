@@ -1,10 +1,12 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
 import {getFunctions, httpsCallable} from "firebase/functions";
-import {collection, deleteDoc, doc, getDoc, getDocFromCache, getFirestore, setDoc, updateDoc} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDoc, getDocFromCache, getFirestore, setDoc, updateDoc, Timestamp} from "firebase/firestore";
 import {getUserEmailFromUid, isUserLoggedIn} from "./auth";
 import {getUserStoreUid} from "../contexts/userStore";
 import {getDocs} from "@firebase/firestore";
+import CryptoJS from "crypto-js";
+import moment from "moment";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_apiKey || "",
@@ -104,6 +106,17 @@ export const getCurrentUserTransactions = async () => {
     let fs = getFirestore(app);
 
     let _doc = await getDoc(doc(fs, "users/", getUserStoreUid()));
+    if (_doc.exists()) {
+        return _doc.data().transaction_history.map((data) => {
+            return new SingleTransaction(data.id, new Date(data.datetime.toDate()), data.points, data.type, data.item);
+        });
+    }
+}
+
+export const getTransactionsForUser = async (uid) => {
+    let fs = getFirestore(app);
+
+    let _doc = await getDoc(doc(fs, "users/", uid));
     if (_doc.exists()) {
         return _doc.data().transaction_history.map((data) => {
             return new SingleTransaction(data.id, new Date(data.datetime.toDate()), data.points, data.type, data.item);
@@ -281,26 +294,53 @@ export const processPendingTransactions = async (uid) => {
         return null;
 
     // Process pending transactions during login step
-    const pending = await getDoc(doc(getFirestore(), "raspberry_pi", uid));
-    if (pending.exists()) {
-        const data = pending.data();
-        const fs = getFirestore();
-        const userRef = doc(fs, "users/", uid);
-        const userDoc = await getDoc(userRef);
-        const user = userDoc.data();
+    // Get all documents in the raspberry_pi collection
 
-        // Create a new transaction for the pending points
-        const transaction = new SingleTransaction(user.transaction_history.length, new Date(), data.points, "Accumulated", "");
+    const docs = await getDocs(collection(getFirestore(), "raspberry_pi"));
+    if (docs.empty) {
+        console.log("No pending transactions found.");
+        return;
+    } else {
+        console.log("Processing pending transactions...");
+        for (const _doc of docs.docs) {
+            let _data = _doc.data().dateTime;
+            console.log(_data)
+            let dateTime = moment(_data, "YYYYMMDD HH:mm:ss");
+            console.log(dateTime)
+            console.log(dateTime.toDate())
+            let qr = _doc.data().decrypted_data;
+            let points = _doc.data().points;
 
-        // Update user points and transaction history
-        user.transaction_history.push(transaction);
+            const decrypt = await CryptoJS.AES.decrypt(qr, process.env.REACT_APP_cryptokey).toString(CryptoJS.enc.Utf8);
+            const uid = decrypt.split('|')[0];
+            console.log("Processing transaction for " + uid + "...");
 
-        await updateDoc(userRef, {
-            points: user.points + data.points,
-            transaction_history: user.transaction_history
-        });
+            const transaction = new SingleTransaction(0, dateTime.toDate(), points, "accumulated", "");
+            const userRef = doc(getFirestore(), "users/", uid);
+            const userDoc = await getDoc(userRef);
+            if (!userDoc.exists()) {
+                console.log("User " + uid + " does not exist.");
+                continue;
+            }
 
-        // Delete the pending transaction
-        await deleteDoc(pending.ref);
+            const user = userDoc.data();
+            const transactions = await getTransactionsForUser(uid);
+            transactions.push(transaction);
+
+            await setDoc(userRef, {
+                points: user.points + points,
+                transaction_history: transactions.map((transaction) => {
+                    return {
+                        id: transaction.id,
+                        datetime: transaction.datetime,
+                        points: transaction.points,
+                        type: transaction.type,
+                        item: transaction.item
+                    }
+                })
+            }, { merge: true });
+            // Delete the pending transaction
+            await deleteDoc(_doc.ref);
+        }
     }
 }
