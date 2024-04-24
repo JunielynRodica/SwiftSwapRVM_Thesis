@@ -32,6 +32,13 @@ const Rewards = () => {
                 || window.navigator.userAgent.includes("Rasp")
                 || window.navigator.userAgent.includes("arm"));
 
+            console log("===USER AGENT===")
+            console.log(window.navigator.userAgent)
+            console.log(window.navigator.userAgent.includes("X11; CrOS")
+console.log(window.navigator.userAgent.includes("Rasp"))
+console.log(window.navigator.userAgent.includes("arm"))
+
+
             setlocalCurrentUserAdmin(await isCurrentUserAdmin());
             setCanRedeem(isCurrentMachineRaspi);
 
