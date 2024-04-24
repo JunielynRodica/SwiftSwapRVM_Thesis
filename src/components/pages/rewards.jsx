@@ -23,7 +23,15 @@ const Rewards = () => {
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());
             setRewards(await getAllStock());
-            setIsCurrentMachineRaspi(window.navigator.userAgent.includes("X11; CrOS"));
+
+            // The machine specifically reports X11 CrOS
+            // Rasp* is for Raspberry Pi (Raspbian/Raspberry)
+            // arm is for ARM-based machines (armhf, armvl, armv7l, armv8l, etc.)
+            setIsCurrentMachineRaspi(
+                window.navigator.userAgent.includes("X11; CrOS")
+                || window.navigator.userAgent.includes("Rasp")
+                || window.navigator.userAgent.includes("arm"));
+
             setlocalCurrentUserAdmin(await isCurrentUserAdmin());
             setCanRedeem(isCurrentMachineRaspi);
 
