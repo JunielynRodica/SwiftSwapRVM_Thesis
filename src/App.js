@@ -65,11 +65,6 @@ function App() {
         });
         initOnce = true;
     
-console.log("LOGON");
-if (!(getAuth(app).currentUser))
-    if (getAuth(app).currentUser.metadata.lastSignInDate)
-     console.log(getAuth(app).currentUser.metadata.lastSignInDate);
-
     const routesArray = [
         {
             path: "*",
