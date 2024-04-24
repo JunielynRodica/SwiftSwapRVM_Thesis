@@ -23,9 +23,9 @@ const Rewards = () => {
         const fetchData = async () => {
             setPoints(await getCurrentUserPoints());
             setRewards(await getAllStock());
-            setIsCurrentMachineRaspi(window.navigator.platform.startsWith("Linux arm"));
+            setIsCurrentMachineRaspi(window.navigator.userAgent.includes("X11; CrOS"));
             setlocalCurrentUserAdmin(await isCurrentUserAdmin());
-            setCanRedeem(isCurrentMachineRaspi || await isCurrentUserAdmin());
+            setCanRedeem(isCurrentMachineRaspi);
 
             console.log("Is Current Machine Raspi: " + isCurrentMachineRaspi)
             console.log("Local Current User Admin: " + localCurrentUserAdmin)
@@ -99,7 +99,7 @@ const Rewards = () => {
             {!canRedeem ? returnRewards(false) : null}
 
             { /** Admin mode message **/ }
-            {localCurrentUserAdmin ? <h2 style={{textAlign: "center", paddingTop: "20px"}}>You are in admin mode, redeem page is enabled.</h2> : null}
+            { /** localCurrentUserAdmin ? <h2 style={{textAlign: "center", paddingTop: "20px"}}>You are in admin mode, redeem page is enabled.</h2> : null **/ }
 
             { /** Admin or on the machine **/ }
             {canRedeem ? rewards.length === 0 ? <h2 style={{textAlign: "center", paddingTop: "20px"}}>Loading rewards, please wait...</h2> : null : null}
