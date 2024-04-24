@@ -68,7 +68,7 @@ const Login = () => {
             await doSignInWithEmailAndPassword(email, password).then(async (res) => {
                 if (res)
                     saveQRCreds(res.qr_encrypted);
-                else {
+                else if (!getUserStoreSignedIn()) {
                     alert('Invalid username or password!');
                     setIsSigningIn(false);
                 }
