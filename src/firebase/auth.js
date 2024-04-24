@@ -53,18 +53,6 @@ export const doCreateUserWithEmailAndPassword = async (email, password, studentN
     transaction_history: []
   });
 
-  // Add transactions for testing
-  // TODO: Testing Data
-  addIncrementTransactionToCurrentUser(1).then(() => {
-    addIncrementTransactionToCurrentUser(2).then(() => {
-      addIncrementTransactionToCurrentUser(3).then(() => {
-        addIncrementTransactionToCurrentUser(2).then(() => {
-          addIncrementTransactionToCurrentUser(1)
-        })
-      })
-    })
-  });
-
   startSessionTimeout(sessionTimeoutMS);
   userStoreLogin(cred.user.uid, email, "");
 };
