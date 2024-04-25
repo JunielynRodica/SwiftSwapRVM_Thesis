@@ -25,13 +25,11 @@ const Rewards = () => {
             setRewards(await getAllStock());
 
             // The machine specifically reports X11 CrOS
-            // Rasp* is for Raspberry Pi (Raspbian/Raspberry)
-            // arm is for ARM-based machines (armhf, armvl, armv7l, armv8l, etc.)
-            setIsCurrentMachineRaspi(window.navigator.userAgent.includes("X11; CrOS"));
-
+            let isRaspi = window.navigator.userAgent.includes("X11; CrOS");
+            setIsCurrentMachineRaspi(isRaspi);
 
             setlocalCurrentUserAdmin(await isCurrentUserAdmin());
-            setCanRedeem(isCurrentMachineRaspi);
+            setCanRedeem(isRaspi);
 
             console.log("Is Current Machine Raspi: " + isCurrentMachineRaspi)
             console.log("Local Current User Admin: " + localCurrentUserAdmin)
