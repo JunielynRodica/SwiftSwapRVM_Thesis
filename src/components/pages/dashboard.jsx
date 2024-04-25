@@ -40,6 +40,7 @@ const Dashboard = () => {
     }
 
     fetchData();
+    console.log("QR DATA: " + QRCreds);
   }, []);
 
     if (!isUserLoggedIn()) {

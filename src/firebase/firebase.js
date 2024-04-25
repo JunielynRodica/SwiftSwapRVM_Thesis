@@ -309,7 +309,9 @@ export const processPendingTransactions = async (uid) => {
             console.log(dateTime)
             console.log(dateTime.toDate())
             let qr = _doc.data().decrypted_data;
+            console.log(qr)
             let points = _doc.data().points;
+            console.log(points)
 
             const decrypt = await CryptoJS.AES.decrypt(qr, process.env.REACT_APP_cryptokey).toString(CryptoJS.enc.Utf8);
             const uid = decrypt.split('|')[0];
@@ -327,6 +329,7 @@ export const processPendingTransactions = async (uid) => {
             const transactions = await getTransactionsForUser(uid);
             transactions.push(transaction);
 
+            console.log("Adding " + points + " points to " + uid + "...");
             await setDoc(userRef, {
                 points: user.points + points,
                 transaction_history: transactions.map((transaction) => {
@@ -340,7 +343,9 @@ export const processPendingTransactions = async (uid) => {
                 })
             }, { merge: true });
             // Delete the pending transaction
+            console.log("Deleting transaction for " + uid + "...");
             await deleteDoc(_doc.ref);
         }
+        return true;
     }
 }

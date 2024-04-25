@@ -61,9 +61,13 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
   try {
     const cred = await signInWithEmailAndPassword(auth, email, password);
 
-    await processPendingTransactions(cred.user.uid);
-    startSessionTimeout(sessionTimeoutMS);
-    userStoreLogin(cred.user.uid, email, "");
+    await processPendingTransactions(cred.user.uid).then((reload) => {
+      if (reload) {
+        window.location.reload();
+      }
+    });
+      startSessionTimeout(sessionTimeoutMS);
+      userStoreLogin(cred.user.uid, email, "");
     return {qr_encrypted: getQRCodeData()};
   } catch (e) {
     return null;
@@ -86,7 +90,11 @@ export const doSignInWithCustomToken = async (access_token) => {
   const server_token = await generateToken({ uid: uid });
 
   const cred = await signInWithCustomToken(auth, server_token.data);
-  await processPendingTransactions(cred.user.uid);
+  await processPendingTransactions(cred.user.uid).then((reload) => {
+    if (reload) {
+      window.location.reload();
+    }
+   });
   startSessionTimeout(sessionTimeoutMS);
   userStoreLogin(cred.user.uid, cred.user.email, "");
   return { qr_encrypted: getQRCodeData() }
