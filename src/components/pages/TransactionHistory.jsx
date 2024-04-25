@@ -31,6 +31,9 @@ const TransactionHistory = () => {
                 }
             }).then(() => {
                 if (internal_has_data) {
+                    transactions.sort((a,b) => {
+                        return b.datetime - a.datetime;
+                    });
                     let _outputHtml = transactions.map((transaction) => {
                         return (
                             <tr key={transaction.id}>

@@ -23,7 +23,21 @@ const navigate = useNavigate();
 
         async function populateData() {
             let data = await getAllTransactions();
-            setTransactions(data);
+            let flat = data.map((user) => {
+                return user.transactions.map((transaction) => {
+                    return {
+                        user: user.user,
+                        email: user.email,
+                        datetime: transaction.datetime,
+                        type: transaction.type,
+                        points: transaction.points,
+                        item: transaction.item
+                    }
+                });
+            }).flat(1).sort((a,b) => {
+                return b.datetime - a.datetime;
+            });
+            setTransactions(flat);
         }
 
         populateData();
@@ -53,19 +67,17 @@ const navigate = useNavigate();
                             </tr>
                             </thead>
                             <tbody>
-                            {transactions.length > 0 ? transactions.map((user) => {
-                                return user.transactions.map((transaction) => {
-                                    return (
-                                        <tr>
-                                            <td>{user.user}</td>
-                                            <td>{user.email}</td>
-                                            <td>{new Date(transaction.datetime.seconds * 1000 + transaction.datetime.nanoseconds / 100000).toLocaleString()}</td>
-                                            <td>{transaction.type}</td>
-                                            <td>{transaction.points}</td>
-                                            <td>{transaction.item}</td>
-                                        </tr>
-                                    )
-                                });
+                            {transactions.length > 0 ? transactions.map((transaction) => {
+                                return (
+                                    <tr>
+                                        <td>{transaction.user}</td>
+                                        <td>{transaction.email}</td>
+                                        <td>{new Date(transaction.datetime.seconds * 1000 + transaction.datetime.nanoseconds / 100000).toLocaleString()}</td>
+                                        <td>{transaction.type}</td>
+                                        <td>{transaction.points}</td>
+                                        <td>{transaction.item}</td>
+                                    </tr>
+                                );
                             }) : <tr>
                                 <td colSpan="6">No transaction history available</td>
                             </tr>}
