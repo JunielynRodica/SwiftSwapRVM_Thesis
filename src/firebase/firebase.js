@@ -303,7 +303,7 @@ export const processPendingTransactions = async (uid) => {
     } else {
         console.log("Processing pending transactions...");
         for (const _doc of docs.docs) {
-            let _data = _doc.data().dateTime;
+            let _data = _doc.data().datetime;
             console.log(_data)
             let dateTime = moment(_data, "YYYYMMDD HH:mm:ss");
             console.log(dateTime)
