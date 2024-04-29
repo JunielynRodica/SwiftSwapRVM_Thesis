@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { AuthProvider, useAuth } from "./contexts/authContext";
 import { useRoutes } from "react-router-dom";
 
@@ -66,10 +66,14 @@ function App() {
         initOnce = true;
 }
 
-console.log("LOGON");
-// if (!(getAuth(app).currentUser))
-//   if (getAuth(app).currentUser.metadata.lastSignInDate)
-//     console.log(getAuth(app).currentUser.metadata. lastSignInDate);
+    useEffect(() => {
+        document.title = 'SwiftSwap RVM';
+    }, []);
+
+    console.log("LOGON");
+    // if (!(getAuth(app).currentUser))
+    //   if (getAuth(app).currentUser.metadata.lastSignInDate)
+    //     console.log(getAuth(app).currentUser.metadata. lastSignInDate);
     
     const routesArray = [
         {
