@@ -66,8 +66,10 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
         window.location.reload();
       }
     });
-      startSessionTimeout(sessionTimeoutMS);
-      userStoreLogin(cred.user.uid, email, "");
+    startSessionTimeout(sessionTimeoutMS);
+    userStoreLogin(cred.user.uid, email, "");
+    const sendLoginNotif = httpsCallable(fbfunctions, "getUserEmail");
+    await sendLoginNotif({ email: cred.user.email, uid: cred.user.uid });
     return {qr_encrypted: getQRCodeData()};
   } catch (e) {
     return null;
@@ -97,6 +99,8 @@ export const doSignInWithCustomToken = async (access_token) => {
    });
   startSessionTimeout(sessionTimeoutMS);
   userStoreLogin(cred.user.uid, cred.user.email, "");
+  const sendLoginNotif = httpsCallable(fbfunctions, "sendLoginNotificationEmail");
+  await sendLoginNotif({ email: cred.user.email, uid: cred.user.uid });
   return { qr_encrypted: getQRCodeData() }
 };
 
