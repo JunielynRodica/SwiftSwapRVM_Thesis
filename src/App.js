@@ -42,6 +42,7 @@ function App() {
 
         if (navigator.onLine === false) {
             disableNetwork(fs).then(() => {
+                alert("You are offline. Please connect to the internet to use the app.");
                 console.log("Firebase: Network disabled");
             });
         }
@@ -49,6 +50,7 @@ function App() {
         window.addEventListener("online", () => {
             console.log("Browser is now online");
             enableNetwork(fs).then(() => {
+                alert("You are now online.");
                 console.log("Firebase: Network enabled");
             });
         }, false);
@@ -56,6 +58,7 @@ function App() {
         window.addEventListener("offline", () => {
             console.log("Browser is now offline");
             disableNetwork(fs).then(() => {
+                alert("You are offline. Please connect to the internet to use the app.");
                 console.log("Firebase: Network disabled");
             });
         });
