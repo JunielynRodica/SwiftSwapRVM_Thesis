@@ -61,7 +61,7 @@ const Dashboard = () => {
       </div>
       <br></br>
 
-      <p className="qr-intro">Use this QR Code to Log in on the SwiftSwap Machine.</p>
+      <p className="qr-intro">Use this QR Code to Log in on the SwiftSwap Machine. This QR Code's validity is limited to a two-day period.</p>
       <br></br>
       <div style={{height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
           {
