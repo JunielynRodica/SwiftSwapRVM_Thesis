@@ -6,10 +6,9 @@ export function startSessionTimeout(time) {
     sessionTimeout = setTimeout(() => {
         alert("Your session has timed out. You will be logged out.");
 
-        doSignOut().then(() => {
-            stopSessionTimeout();
-            window.location.reload();
-        });
+        doSignOut()
+        stopSessionTimeout();
+        window.location.reload();
     }, time);
 }
 

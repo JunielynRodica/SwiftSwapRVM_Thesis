@@ -1,8 +1,15 @@
 import React from "react";
 import '../../style/about.css';
 import rvmpic from '../../assets/rvmpic.png';
+import {isUserLoggedIn} from "../../firebase/auth";
+import Login from "../auth/login";
 
 const About = () => {
+
+    if (!isUserLoggedIn()) {
+        return <Login/>
+    }
+
     return(
         <div className="about-page">
         <div className="aboutswift">
